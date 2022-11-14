@@ -1,7 +1,6 @@
 import React from "react";
 import VuiTypography from "components/VuiTypography";
 import VuiBox from "components/VuiBox";
-import { StyledGist } from "./style";
 import { CardMedia } from "@mui/material";
 import { Card } from "@mui/material";
 

@@ -7,27 +7,13 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import VuiBox from "components/VuiBox";
 import VuiButton from "components/VuiButton";
-import "./style.css";
-const Data = [
-  {
-    key: 1,
-    title: "Which is the World's Best man Ever in the history",
-    options: [
-      { option: "Muhammad P.B.U.H", opValue: "correct" },
-      { option: "Anyone else", opValue: "incorrect1" },
-      { option: "Someone else", opValue: "incorrect2" },
-    ],
-  },
-  {
-    key: 2,
-    title: "Which is the World's Best place",
-    options: [
-      { option: "Meka", opValue: "correct" },
-      { option: "Dubai", opValue: "incorrect1" },
-      { option: "Australia", opValue: "incorrect2" },
-    ],
-  },
-];
+import { Universal } from "../../../../data";
+let Data = [];
+Universal.courses.map((course) => {
+  if (course.courseID === 1) {
+    Data = course.learnModule.questions;
+  }
+});
 
 const RadioCard = () => {
   const [ans, setAns] = React.useState("");
@@ -97,6 +83,7 @@ const RadioCard = () => {
                     );
                   })}
                 </RadioGroup>
+                <FormHelperText sx={{ color: "white" }}>{helperText}</FormHelperText>
               </VuiBox>
               <VuiButton sx={{ mt: 1, mr: 1 }} type="submit" color="info">
                 {iteration + 1 == dataLenght ? "Submit" : "Next"}
@@ -159,7 +146,6 @@ const RadioCard = () => {
                                   );
                                 })}
                               </RadioGroup>
-                              <FormHelperText sx={{ color: "white" }}>{helperText}</FormHelperText>
                             </VuiBox>
                           </>
                         );

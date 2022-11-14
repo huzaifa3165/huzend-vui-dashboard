@@ -1,5 +1,5 @@
 import React from "react";
-import { profile } from "../../../../data";
+import { profile, Universal } from "../../../../data";
 import { Card } from "@mui/material";
 import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
@@ -23,7 +23,12 @@ const CoursesEnrolled = () => {
         </VuiTypography>
         <VuiBox sx={{ alignSelf: "center", justifySelf: "center", zIndex: "-1" }}>
           <VuiBox sx={{ position: "relative", display: "inline-flex" }}>
-            <CircularProgress variant="determinate" value={60} size={170} color="info" />
+            <CircularProgress
+              variant="determinate"
+              value={(profile.courses.coursesEnrolled.length / Universal.courses.length) * 100}
+              size={170}
+              color="info"
+            />
             <VuiBox
               sx={{
                 top: 0,
@@ -69,7 +74,7 @@ const CoursesEnrolled = () => {
           })}
         >
           <VuiTypography color="text" variant="caption" display="inline-block" fontWeight="regular">
-            0%
+            100%
           </VuiTypography>
           <VuiBox
             flexDirection="column"
@@ -82,11 +87,11 @@ const CoursesEnrolled = () => {
               {profile.courses.coursesEnrolled.length}
             </VuiTypography>
             <VuiTypography color="text" variant="caption" fontWeight="regular">
-              Enrolled from 210
+              Enrolled from {Universal.courses.length}
             </VuiTypography>
           </VuiBox>
           <VuiTypography color="text" variant="caption" display="inline-block" fontWeight="regular">
-            100%
+            0%
           </VuiTypography>
         </VuiBox>
       </VuiBox>

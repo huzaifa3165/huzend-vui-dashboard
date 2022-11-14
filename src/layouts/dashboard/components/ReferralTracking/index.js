@@ -6,13 +6,31 @@ import colors from "assets/theme/base/colors";
 import { FaEllipsisH } from "react-icons/fa";
 import linearGradient from "assets/theme/functions/linearGradient";
 import CircularProgress from "@mui/material/CircularProgress";
-import { profile } from "../../../../data";
+import { profile, Universal } from "../../../../data";
 
 function ReferralTracking() {
   const { info, gradients } = colors;
   const { cardContent } = gradients;
-  const activeCourse = profile.courses.activelyTakingCourse;
-  const percentage = 71;
+  let activeCourse = {};
+  profile.courses.coursesEnrolled.map((course) => {
+    if (course.activelyTaking) {
+      activeCourse = course;
+    }
+  });
+  let activeCourseUniversal = {};
+  Universal.courses.map((course) => {
+    console.log(course.courseID, activeCourse.courseID);
+    if (course.courseID === activeCourse.courseID) {
+      activeCourseUniversal = course;
+    }
+  });
+  const percentage = Math.round(
+    (profile.courses.coursesEnrolled.filter((obj) => obj.activelyTaking)[0].taskCompleted.videos
+      .length /
+      activeCourseUniversal.learnModule.length) *
+      100
+  );
+
   // const percentage = Math.round(
   //   ((activeCourse.tasksCompleted.videos.length + activeCourse.tasksCompleted.tasks.length) / 200) *
   //     100
@@ -37,7 +55,7 @@ function ReferralTracking() {
           mb="40px"
         >
           <VuiTypography variant="lg" color="white" mr="auto" fontWeight="bold">
-            Web Development Tracking
+            {activeCourse.courseName} Tracking
           </VuiTypography>
           <VuiBox
             display="flex"
@@ -102,7 +120,9 @@ function ReferralTracking() {
                 Total Videos
               </VuiTypography>
               <VuiTypography color="white" variant="lg" fontWeight="bold">
-                210 Videos
+                {activeCourseUniversal.learnModule.length === 1
+                  ? "1 Video"
+                  : `${activeCourseUniversal.learnModule.length} Videos`}
               </VuiTypography>
             </VuiBox>
             <VuiBox
@@ -126,11 +146,13 @@ function ReferralTracking() {
                 Watched
               </VuiTypography>
               <VuiTypography color="white" variant="lg" fontWeight="bold">
-                {
-                  profile.courses.coursesEnrolled.filter((obj) => obj.activelyTaking)[0]
-                    .taskCompleted.videos.length
-                }{" "}
-                Videos
+                {profile.courses.coursesEnrolled.filter((obj) => obj.activelyTaking)[0]
+                  .taskCompleted.videos.length === 1
+                  ? "1 Video"
+                  : `${
+                      profile.courses.coursesEnrolled.filter((obj) => obj.activelyTaking)[0]
+                        .taskCompleted.videos.length
+                    } Videos`}{" "}
               </VuiTypography>
             </VuiBox>
           </Stack>
@@ -176,7 +198,7 @@ function ReferralTracking() {
                   {percentage}%
                 </VuiTypography>
                 <VuiTypography color="text" variant="button">
-                  Out of 210
+                  Out of {activeCourseUniversal.learnModule.length}
                 </VuiTypography>
               </VuiBox>
             </VuiBox>
