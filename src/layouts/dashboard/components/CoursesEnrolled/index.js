@@ -1,5 +1,6 @@
 import React from "react";
-import { profile, Universal } from "../../../../data";
+import { Universal } from "../../../../data";
+import { connect } from "react-redux";
 import { Card } from "@mui/material";
 import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
@@ -7,8 +8,9 @@ import { IoDesktopOutline } from "react-icons/io5";
 import colors from "assets/theme/base/colors";
 import linearGradient from "assets/theme/functions/linearGradient";
 import CircularProgress from "@mui/material/CircularProgress";
+import { selectCurrentUser } from "redux/user/user.reselect";
 
-const CoursesEnrolled = () => {
+const CoursesEnrolled = ({ currentUser }) => {
   const { info, gradients } = colors;
   const { cardContent } = gradients;
 
@@ -25,7 +27,11 @@ const CoursesEnrolled = () => {
           <VuiBox sx={{ position: "relative", display: "inline-flex" }}>
             <CircularProgress
               variant="determinate"
-              value={(profile.courses.coursesEnrolled.length / Universal.courses.length) * 100}
+              value={
+                currentUser
+                  ? (currentUser.courses.coursesEnrolled.length / Universal.courses.length) * 100
+                  : 0
+              }
               size={170}
               color="info"
             />
@@ -84,7 +90,7 @@ const CoursesEnrolled = () => {
             sx={{ minWidth: "80px" }}
           >
             <VuiTypography color="white" variant="h3">
-              {profile.courses.coursesEnrolled.length}
+              {currentUser ? currentUser.courses.coursesEnrolled.length : 0}
             </VuiTypography>
             <VuiTypography color="text" variant="caption" fontWeight="regular">
               Enrolled from {Universal.courses.length}
@@ -98,5 +104,10 @@ const CoursesEnrolled = () => {
     </Card>
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+  };
+};
 
-export default CoursesEnrolled;
+export default connect(mapStateToProps)(CoursesEnrolled);

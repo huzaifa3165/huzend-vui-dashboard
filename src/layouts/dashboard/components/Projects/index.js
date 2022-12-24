@@ -18,6 +18,7 @@
 
 import { useState } from "react";
 
+import { connect } from "react-redux";
 // @mui material components
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
@@ -34,9 +35,10 @@ import Table from "examples/Tables/Table";
 
 // Data
 import data from "layouts/dashboard/components/Projects/data";
+import { selectCurrentUser } from "redux/user/user.reselect";
 
-function Projects() {
-  const { columns, rows } = data();
+function Projects({ currentUser }) {
+  const { columns, rows } = data(currentUser);
   const [menu, setMenu] = useState(null);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
@@ -77,7 +79,7 @@ function Projects() {
           <VuiBox display="flex" alignItems="center" lineHeight={0}>
             <BsCheckCircleFill color="green" size="15px" />
             <VuiTypography variant="button" fontWeight="regular" color="text" ml="5px">
-              &nbsp;<strong>30 done</strong> this month
+              &nbsp;<strong>5 done</strong> this month
             </VuiTypography>
           </VuiBox>
         </VuiBox>
@@ -88,24 +90,36 @@ function Projects() {
         </VuiBox>
         {renderMenu}
       </VuiBox>
-      <VuiBox
-        sx={{
-          "& th": {
-            borderBottom: ({ borders: { borderWidth }, palette: { grey } }) =>
-              `${borderWidth[1]} solid ${grey[700]}`,
-          },
-          "& .MuiTableRow-root:not(:last-child)": {
-            "& td": {
+      {currentUser.courses.coursesEnrolled.length !== 0 ? (
+        <VuiBox
+          sx={{
+            "& th": {
               borderBottom: ({ borders: { borderWidth }, palette: { grey } }) =>
                 `${borderWidth[1]} solid ${grey[700]}`,
             },
-          },
-        }}
-      >
-        <Table columns={columns} rows={rows} />
-      </VuiBox>
+            "& .MuiTableRow-root:not(:last-child)": {
+              "& td": {
+                borderBottom: ({ borders: { borderWidth }, palette: { grey } }) =>
+                  `${borderWidth[1]} solid ${grey[700]}`,
+              },
+            },
+          }}
+        >
+          <Table columns={columns} rows={rows} />
+        </VuiBox>
+      ) : (
+        <VuiBox>
+          <VuiTypography variant="h6">No Courses Enrolled</VuiTypography>
+        </VuiBox>
+      )}
     </Card>
   );
 }
 
-export default Projects;
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+  };
+};
+
+export default connect(mapStateToProps)(Projects);

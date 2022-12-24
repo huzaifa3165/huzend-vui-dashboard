@@ -1,12 +1,17 @@
-import React from "react";
+import { useState, useEffect } from "react";
 
 import { Card, Icon } from "@mui/material";
 import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
 import { profile } from "../../../../data";
 import gif from "assets/images/cardimgfree.png";
-
-const WelcomeMark = () => {
+import { connect } from "react-redux";
+import { selectCurrentUser } from "redux/user/user.reselect";
+const WelcomeMark = ({ currentUser }) => {
+  const [redirectToLearn, useRedirectToLearn] = useState(false);
+  const learningRedirect = () => {
+    useRedirectToLearn(true);
+  };
   return (
     <Card
       sx={() => ({
@@ -23,7 +28,8 @@ const WelcomeMark = () => {
             Welcome back,
           </VuiTypography>
           <VuiTypography color="white" variant="h3" fontWeight="bold" mb="18px">
-            {profile.name}
+            {currentUser ? currentUser.displayName : {}}
+            {console.log(currentUser)}
           </VuiTypography>
           <VuiTypography color="text" variant="h6" fontWeight="regular" mb="auto">
             Glad to see you again!
@@ -32,7 +38,7 @@ const WelcomeMark = () => {
         </VuiBox>
         <VuiTypography
           component="a"
-          href="#"
+          onClick={learningRedirect}
           variant="button"
           color="white"
           fontWeight="regular"
@@ -60,5 +66,10 @@ const WelcomeMark = () => {
     </Card>
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+  };
+};
 
-export default WelcomeMark;
+export default connect(mapStateToProps)(WelcomeMark);

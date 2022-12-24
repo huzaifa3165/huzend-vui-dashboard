@@ -20,6 +20,7 @@
 import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
 
+import { useVisionUIController } from "context";
 function Footer() {
   return (
     <VuiBox

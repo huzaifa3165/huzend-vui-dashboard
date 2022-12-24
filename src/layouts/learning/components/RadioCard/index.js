@@ -11,7 +11,7 @@ import { Universal } from "../../../../data";
 let Data = [];
 Universal.courses.map((course) => {
   if (course.courseID === 1) {
-    Data = course.learnModule.questions;
+    Data = course.learnModule[0].questions;
   }
 });
 

@@ -1,21 +1,37 @@
-/*!
-
-=========================================================
-* Vision UI Free React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/vision-ui-free-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
-* Licensed under MIT (https://github.com/creativetimofficial/vision-ui-free-react/blob/master LICENSE.md)
-
-* Design and Coded by Simmmple & Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-  
-*/
-const emptyLastYearTimeSpent = {
+import { userTypes } from "./user.types";
+const coursesInit = {
+  coursesEnrolled: [
+    {
+      courseName: "App Development",
+      courseID: 2,
+      activelyTaking: false,
+      taskCompleted: [1, 3],
+      instructors: [
+        {
+          name: "Ryan Tompson",
+          image: "https://huzaifa3165.github.io/dashboard-assets/images/avatar1.png",
+        },
+        {
+          name: "Romina Hadid",
+          image: "https://huzaifa3165.github.io/dashboard-assets/images/avatar2.png",
+        },
+        {
+          name: "Alexander Smith",
+          image: "https://huzaifa3165.github.io/dashboard-assets/images/avatar3.png",
+        },
+        {
+          name: "Jessica Doe",
+          image: "https://huzaifa3165.github.io/dashboard-assets/images/avatar4.png",
+        },
+      ],
+      students: 900,
+    },
+  ],
+  subscribedToNewsletter: false,
+  posts: [],
+  rewards: [],
+};
+const lastYearTimeSpentFullInit = {
   1: {
     w1: [0, 0, 0, 0, 0, 0, 0],
     w2: [0, 0, 0, 0, 0, 0, 0],
@@ -89,29 +105,32 @@ const emptyLastYearTimeSpent = {
     w4: [0, 0, 0, 0, 0, 0, 0],
   },
 };
-const TimeSpentLastYearPerMonth = (dataObj) => {
-  let dataArray = [];
-  Object.entries(dataObj).map(([key, value], index) => {
-    const { w1, w2, w3, w4 } = value;
-    const a1 = w1.reduce((a, b) => a + b, 0) / w1.length;
-    const a2 = w2.reduce((a, b) => a + b, 0) / w2.length;
-    const a3 = w3.reduce((a, b) => a + b, 0) / w3.length;
-    const a4 = w4.reduce((a, b) => a + b, 0) / w4.length;
-    dataArray.push(Math.round((a1 + a2 + a3 + a4) / 240)); // 4(average) * 60(toMinutes)
-  });
-  return dataArray;
+const INITIAL_STATE = {
+  currentUser: {
+    displayName: "",
+    email: "",
+    createdAt: "",
+    timeSpentToday: 0,
+    courses: coursesInit,
+    photoURL:
+      "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/319/robot_1f916.png",
+    lastYearTimeSpentFull: lastYearTimeSpentFullInit,
+    blogsTraffic: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    rewards: [],
+  },
 };
-const lineChartDataDashboard = (profile) => [
-  {
-    name: "Watch Time",
-    data: profile
-      ? TimeSpentLastYearPerMonth(profile.lastYearTimeSpentFull)
-      : TimeSpentLastYearPerMonth(emptyLastYearTimeSpent),
-  },
-  {
-    name: "Blogs Traffic",
-    data: profile ? profile.blogsTraffic : [0, 0, 0, 0, 0, 0, 0],
-  },
-];
 
-export default lineChartDataDashboard;
+const userReducer = (state = INITIAL_STATE, action) => {
+  switch (action.type) {
+    case userTypes.SET_CURRENT_USER:
+      return {
+        ...state,
+        currentUser: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export default userReducer;

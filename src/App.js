@@ -41,28 +41,142 @@ import rtlPlugin from "stylis-plugin-rtl";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
+import { connect } from "react-redux";
 // Vision UI Dashboard React routes
 import routes from "routes";
 
 // Vision UI Dashboard React contexts
-import { useVisionUIController, setMiniSidenav, setOpenConfigurator } from "context";
+import { useVisionUIController, setMiniSidenav, setOpenConfigurator, setIsLoggedIn } from "context";
 
-export default function App() {
+import { auth, createNewUserIfExist } from "./firebase";
+import { selectCurrentUser } from "redux/user/user.reselect";
+import { setCurrentUser } from "redux/user/user.actions";
+
+const coursesInit = {
+  coursesEnrolled: [
+    {
+      courseName: "App Development",
+      courseID: 2,
+      activelyTaking: false,
+      taskCompleted: [1, 3],
+      instructors: [
+        {
+          name: "Ryan Tompson",
+          image: "https://huzaifa3165.github.io/dashboard-assets/images/avatar1.png",
+        },
+        {
+          name: "Romina Hadid",
+          image: "https://huzaifa3165.github.io/dashboard-assets/images/avatar2.png",
+        },
+        {
+          name: "Alexander Smith",
+          image: "https://huzaifa3165.github.io/dashboard-assets/images/avatar3.png",
+        },
+        {
+          name: "Jessica Doe",
+          image: "https://huzaifa3165.github.io/dashboard-assets/images/avatar4.png",
+        },
+      ],
+      students: 900,
+    },
+  ],
+  subscribedToNewsletter: false,
+  posts: [],
+  rewards: [],
+};
+const lastYearTimeSpentFullInit = {
+  1: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  2: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  3: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  4: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  5: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  6: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  7: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  8: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  9: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  10: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  11: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  12: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+};
+const initialUser = {
+  displayName: "",
+  email: "",
+  createdAt: "",
+  timeSpentToday: 0,
+  courses: coursesInit,
+  photoURL:
+    "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/319/robot_1f916.png",
+  lastYearTimeSpentFull: lastYearTimeSpentFullInit,
+  blogsTraffic: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  rewards: [],
+};
+
+const App = ({ currentUser, setCurrentUser }) => {
   const [controller, dispatch] = useVisionUIController();
   const { miniSidenav, direction, layout, openConfigurator, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
-
-  // Cache for the rtl
-  useMemo(() => {
-    const cacheRtl = createCache({
-      key: "rtl",
-      stylisPlugins: [rtlPlugin],
-    });
-
-    setRtlCache(cacheRtl);
-  }, []);
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -93,6 +207,26 @@ export default function App() {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
+
+  useEffect(() => {
+    const unsubscribeAuthOnCalling = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const userRef = await createNewUserIfExist(user);
+        userRef.onSnapshot((snapShot) => {
+          console.log(snapShot.data());
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data(),
+          });
+        });
+      } else {
+        setCurrentUser(initialUser);
+      }
+    });
+    return () => {
+      unsubscribeAuthOnCalling();
+    };
+  }, [setCurrentUser]);
 
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
@@ -141,7 +275,7 @@ export default function App() {
               color={sidenavColor}
               brand=""
               brandName="HUZEND"
-              routes={routes}
+              routes={routes(currentUser)}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
             />
@@ -150,10 +284,15 @@ export default function App() {
           </>
         )}
         {layout === "vr" && <Configurator />}
-        <Switch>
-          {getRoutes(routes)}
-          <Redirect from="*" to="/dashboard" />
-        </Switch>
+        {currentUser.email !== "" ? (
+          <Switch>
+            {getRoutes(routes(currentUser))}
+            <Redirect from="*" to="/dashboard" />
+            {/* ////////////////////////////////////////////////////////////////////////////// change the dashboard to sign in with respect to current user */}
+          </Switch>
+        ) : (
+          <Redirect from="*" to="/authentication/sign-in" />
+        )}
       </ThemeProvider>
     </CacheProvider>
   ) : (
@@ -164,8 +303,8 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand=""
-            brandName="VISION UI FREE"
-            routes={routes}
+            brandName="HUZEND"
+            routes={routes(currentUser)}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
@@ -175,9 +314,26 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Switch>
-        {getRoutes(routes)}
-        <Redirect from="*" to="/dashboard" />
+        {getRoutes(routes(currentUser))}
+        <Redirect
+          from="*"
+          to={currentUser.email !== "" ? `/dashboard` : `authentication/sign-in`}
+        />
       </Switch>
     </ThemeProvider>
   );
-}
+};
+
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

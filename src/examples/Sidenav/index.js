@@ -16,7 +16,7 @@
 
 */
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 // react-router-dom components
 import { useLocation, NavLink } from "react-router-dom";
@@ -48,6 +48,9 @@ import { useVisionUIController, setMiniSidenav, setTransparentSidenav } from "co
 
 // Vision UI Dashboard React icons
 import SimmmpleLogo from "examples/Icons/SimmmpleLogo";
+
+import { auth } from "../../firebase";
+import { Redirect } from "react-router-dom";
 
 // function Sidenav({ color, brand, brandName, routes, ...rest }) {
 function Sidenav({ color, brandName, routes, ...rest }) {
@@ -82,6 +85,20 @@ function Sidenav({ color, brandName, routes, ...rest }) {
       setTransparentSidenav(dispatch, false);
     }
   }, []);
+
+  // Logout Logic
+  const [isSignOut, useIsSignOut] = useState(false);
+  const [redirect, useRedirect] = useState(false);
+  const changeSignedState = () => {
+    useIsSignOut(true);
+  };
+  useEffect(() => {
+    if (isSignOut) {
+      auth.signOut().then(() => {
+        useRedirect(true);
+      });
+    }
+  }, [isSignOut]);
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, route, href }) => {
@@ -142,6 +159,7 @@ function Sidenav({ color, brandName, routes, ...rest }) {
 
   return (
     <SidenavRoot {...rest} variant="permanent" ownerState={{ transparentSidenav, miniSidenav }}>
+      {redirect ? <Redirect from="*" to="authentication/sign-in" /> : ""}
       <VuiBox
         pt={3.5}
         pb={0.5}
@@ -229,14 +247,12 @@ function Sidenav({ color, brandName, routes, ...rest }) {
         <VuiBox mt={2}>
           <VuiButton
             component="a"
-            href="https://creative-tim.com/product/vision-ui-dashboard-pro-react"
-            target="_blank"
-            rel="noreferrer"
+            onClick={changeSignedState}
             variant="gradient"
             color={color}
             fullWidth
           >
-            Want any help?
+            Sign Out
           </VuiButton>
         </VuiBox>
       </VuiBox>

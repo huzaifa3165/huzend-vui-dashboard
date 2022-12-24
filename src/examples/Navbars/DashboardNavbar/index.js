@@ -40,6 +40,10 @@ import VuiInput from "components/VuiInput";
 import Breadcrumbs from "examples/Breadcrumbs";
 import NotificationItem from "examples/Items/NotificationItem";
 
+// redux
+import { connect } from "react-redux";
+import { selectCurrentUser } from "redux/user/user.reselect";
+
 // Custom styles for DashboardNavbar
 import {
   navbar,
@@ -60,8 +64,9 @@ import {
 // Images
 import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
+import VuiAvatar from "components/VuiAvatar";
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function DashboardNavbar({ absolute, light, isMini, currentUser }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useVisionUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
@@ -166,24 +171,37 @@ function DashboardNavbar({ absolute, light, isMini }) {
               />
             </VuiBox>
             <VuiBox color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in">
-                <IconButton sx={navbarIconButton} size="small">
-                  <Icon
-                    sx={({ palette: { dark, white } }) => ({
-                      color: light ? white.main : dark.main,
-                    })}
-                  >
-                    account_circle
-                  </Icon>
-                  <VuiTypography
-                    variant="button"
-                    fontWeight="medium"
-                    color={light ? "white" : "dark"}
-                  >
-                    Sign in
-                  </VuiTypography>
-                </IconButton>
-              </Link>
+              {currentUser ? (
+                <Link to="/profile">
+                  <IconButton sx={navbarIconButton}>
+                    <VuiAvatar
+                      src="https://res.cloudinary.com/demo/image/twitter/1330457336.jpg"
+                      alt="proile"
+                      size="xs"
+                    ></VuiAvatar>
+                  </IconButton>
+                </Link>
+              ) : (
+                <Link to="/authentication/sign-in">
+                  <IconButton sx={navbarIconButton} size="small">
+                    <Icon
+                      sx={({ palette: { dark, white } }) => ({
+                        color: light ? white.main : dark.main,
+                      })}
+                    >
+                      account_circle
+                    </Icon>
+                    <VuiTypography
+                      variant="button"
+                      fontWeight="medium"
+                      color={light ? "white" : "dark"}
+                    >
+                      Sign in
+                    </VuiTypography>
+                  </IconButton>
+                </Link>
+              )}
+
               <IconButton
                 size="small"
                 color="inherit"
@@ -234,4 +252,10 @@ DashboardNavbar.propTypes = {
   isMini: PropTypes.bool,
 };
 
-export default DashboardNavbar;
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+  };
+};
+
+export default connect(mapStateToProps)(DashboardNavbar);

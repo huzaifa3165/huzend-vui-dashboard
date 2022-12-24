@@ -32,10 +32,11 @@ import Table from "examples/Tables/Table";
 // Data
 import authorsTableData from "layouts/courses/data/authorsTableData";
 import projectsTableData from "layouts/courses/data/projectsTableData";
-
-function Courses() {
+import { connect } from "react-redux";
+import { selectCurrentUser } from "redux/user/user.reselect";
+function Courses({ currentUser }) {
   const { columns, rows } = authorsTableData;
-  const { columns: prCols, rows: prRows } = projectsTableData;
+  const { columns: prCols, rows: prRows } = projectsTableData(currentUser);
 
   return (
     <DashboardLayout>
@@ -72,22 +73,26 @@ function Courses() {
               Enrolled Courses
             </VuiTypography>
           </VuiBox>
-          <VuiBox
-            sx={{
-              "& th": {
-                borderBottom: ({ borders: { borderWidth }, palette: { grey } }) =>
-                  `${borderWidth[1]} solid ${grey[700]}`,
-              },
-              "& .MuiTableRow-root:not(:last-child)": {
-                "& td": {
+          {currentUser.courses.coursesEnrolled.length !== 0 ? (
+            <VuiBox
+              sx={{
+                "& th": {
                   borderBottom: ({ borders: { borderWidth }, palette: { grey } }) =>
                     `${borderWidth[1]} solid ${grey[700]}`,
                 },
-              },
-            }}
-          >
-            <Table columns={prCols} rows={prRows} />
-          </VuiBox>
+                "& .MuiTableRow-root:not(:last-child)": {
+                  "& td": {
+                    borderBottom: ({ borders: { borderWidth }, palette: { grey } }) =>
+                      `${borderWidth[1]} solid ${grey[700]}`,
+                  },
+                },
+              }}
+            >
+              <Table columns={prCols} rows={prRows} />
+            </VuiBox>
+          ) : (
+            <VuiTypography variant="h6">No Course Enrolled</VuiTypography>
+          )}
         </Card>
       </VuiBox>
       <Footer />
@@ -95,4 +100,10 @@ function Courses() {
   );
 }
 
-export default Courses;
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+  };
+};
+
+export default connect(mapStateToProps)(Courses);

@@ -40,7 +40,8 @@ import logoJira from "assets/images/small-logos/logo-jira.svg";
 import logoSlack from "assets/images/small-logos/logo-slack.svg";
 import logoWebDev from "assets/images/small-logos/logo-webdev.svg";
 import logoXD from "assets/images/small-logos/logo-xd.svg";
-import { profile } from "../../../data";
+import { profile, Universal } from "../../../data";
+let tasksTotalLength;
 
 const avatars = (members) =>
   members.map(([image, name]) => (
@@ -85,55 +86,65 @@ const action = (
   </Icon>
 );
 
-export default {
-  columns: [
-    { name: "title", align: "left" },
-    { name: "instructors", align: "left" },
-    { name: "students", align: "center" },
-    { name: "completion", align: "center" },
-  ],
+const projectsTableData = (profile) => {
+  return {
+    columns: [
+      { name: "title", align: "left" },
+      { name: "instructors", align: "left" },
+      { name: "students", align: "center" },
+      { name: "completion", align: "center" },
+    ],
 
-  rows: profile.courses.coursesEnrolled.map((data) => {
-    return {
-      title: (
-        <VuiBox display="flex" alignItems="center">
-          <AdobeXD size="20px" />
-          <VuiTypography pl="16px" color="white" variant="button" fontWeight="medium">
-            {data.courseName}
-          </VuiTypography>
-        </VuiBox>
-      ),
-      instructors: (
-        <VuiBox display="flex" py={1}>
-          {avatars(
-            data.instructors.map((data2) => {
-              let list = [data2.image, data2.name];
-              return list;
-            })
-          )}
-        </VuiBox>
-      ),
-      students: (
-        <VuiTypography variant="button" color="white" fontWeight="medium">
-          900
-        </VuiTypography>
-      ),
-      completion: (
-        <VuiBox width="8rem" textAlign="left">
-          <VuiTypography color="white" variant="button" fontWeight="bold">
-            {Math.round((data.taskCompleted.videos.length + data.taskCompleted.tasks.length) / 2.1)}
-            %
-          </VuiTypography>
-          <VuiProgress
-            value={Math.round(
-              (data.taskCompleted.videos.length + data.taskCompleted.tasks.length) / 2.1
+    rows: profile.courses.coursesEnrolled.map((data) => {
+      Universal.courses.map((course) => {
+        if (data.courseID === course.courseID) {
+          tasksTotalLength = course.learnModule.length;
+        }
+      });
+      return {
+        title: (
+          <VuiBox display="flex" alignItems="center">
+            <AdobeXD size="20px" />
+            <VuiTypography pl="16px" color="white" variant="button" fontWeight="medium">
+              {data.courseName}
+            </VuiTypography>
+          </VuiBox>
+        ),
+        instructors: (
+          <VuiBox display="flex" py={1}>
+            {avatars(
+              data.instructors.map((data2) => {
+                let list = [data2.image, data2.name];
+                return list;
+              })
             )}
-            color="info"
-            label={false}
-            sx={{ background: "#2D2E5F" }}
-          />
-        </VuiBox>
-      ),
-    };
-  }),
+          </VuiBox>
+        ),
+        students: (
+          <VuiTypography variant="button" color="white" fontWeight="medium">
+            {Universal.courses.map((course) => {
+              if (data.courseID === course.courseID) {
+                return course.totalEnrollments;
+              }
+            })}
+          </VuiTypography>
+        ),
+        completion: (
+          <VuiBox width="8rem" textAlign="left">
+            <VuiTypography color="white" variant="button" fontWeight="bold">
+              {Math.round((data.taskCompleted.length / tasksTotalLength) * 100)} %
+            </VuiTypography>
+            <VuiProgress
+              value={Math.round((data.taskCompleted.length / tasksTotalLength) * 100)}
+              color="info"
+              label={false}
+              sx={{ background: "#2D2E5F" }}
+            />
+          </VuiBox>
+        ),
+      };
+    }),
+  };
 };
+
+export default projectsTableData;

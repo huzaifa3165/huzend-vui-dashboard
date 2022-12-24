@@ -2,13 +2,13 @@
 
 import { array } from "prop-types";
 import { Provider } from "react-redux";
-
+import React from "react";
 // functions
 
 // data
 export const profile = {
-  name: "Mark Johnson",
-  email: "mark@huzend.com",
+  name: "Muhammad Huzaifa",
+  email: "huzaifa@huzend.com",
   timeSpentToday: 3480,
   lastYearTimeSpentFull: {
     1: {
@@ -91,10 +91,7 @@ export const profile = {
         courseName: "App Development",
         courseID: 2,
         activelyTaking: false,
-        taskCompleted: {
-          videos: ["7sd8d", "asdfc", "adsfa", "8asfd", "vcxbf"],
-          tasks: ["igvbm", "iovjg", "lkfvd", "dfdff", "dfjkl"],
-        },
+        taskCompleted: [1, 3],
         instructors: [
           {
             name: "Ryan Tompson",
@@ -119,47 +116,7 @@ export const profile = {
         courseName: "Game Development",
         courseID: 3,
         activelyTaking: false,
-        taskCompleted: {
-          videos: [
-            "7sd8d",
-            "asdfc",
-            "adsfa",
-            "8asfd",
-            "vcxbf",
-            "7sd8d",
-            "asdfc",
-            "adsfa",
-            "8asfd",
-            "vcxbf",
-            "7sd8d",
-            "asdfc",
-            "adsfa",
-            "8asfd",
-            "vcxbf",
-          ],
-          tasks: [
-            "igvbm",
-            "iovjg",
-            "lkfvd",
-            "dfdff",
-            "dfjkl",
-            "7sd8d",
-            "asdfc",
-            "adsfa",
-            "8asfd",
-            "vcxbf",
-            "7sd8d",
-            "asdfc",
-            "adsfa",
-            "8asfd",
-            "vcxbf",
-            "7sd8d",
-            "asdfc",
-            "adsfa",
-            "8asfd",
-            "vcxbf",
-          ],
-        },
+        taskCompleted: [1, 3],
         instructors: [
           {
             name: "Ryan Tompson",
@@ -184,10 +141,7 @@ export const profile = {
         courseName: "Web Development",
         courseID: 1,
         activelyTaking: true,
-        taskCompleted: {
-          videos: ["7sd8d", "ljdf"],
-          tasks: ["igvbm", "iovjg", "lkfvd", "dfdff", "dfjkl"],
-        },
+        taskCompleted: [1, 3],
         instructors: [
           {
             name: "Ryan Tompson",
@@ -222,33 +176,7 @@ export const profile = {
       postID: "d5as8dc",
     },
   ],
-  rewards: [
-    {
-      title: "Unstoppable Learner",
-      description: "Watched courses for more than 5 hours without break",
-      image: "https://cdn.pixabay.com/photo/2017/08/05/11/16/logo-2582748_960_720.png",
-    },
-    {
-      title: "Unstoppable Learner",
-      description: "Watched courses for more than 5 hours without break",
-      image: "https://cdn.pixabay.com/photo/2017/08/05/11/16/logo-2582748_960_720.png",
-    },
-    {
-      title: "Unstoppable Learner",
-      description: "Watched courses for more than 5 hours without break",
-      image: "https://cdn.pixabay.com/photo/2017/08/05/11/16/logo-2582748_960_720.png",
-    },
-    {
-      title: "Unstoppable Learner",
-      description: "Watched courses for more than 5 hours without break",
-      image: "https://cdn.pixabay.com/photo/2017/08/05/11/16/logo-2582748_960_720.png",
-    },
-    {
-      title: "Unstoppable Learner",
-      description: "Watched courses for more than 5 hours without break",
-      image: "https://cdn.pixabay.com/photo/2017/08/05/11/16/logo-2582748_960_720.png",
-    },
-  ],
+  rewards: [1, 2, 3],
 };
 
 export const Universal = {
@@ -257,6 +185,13 @@ export const Universal = {
       courseID: 1,
       courseName: "Web Development",
       totalEnrollments: 3234,
+      instructor: {
+        name: "Huzaifa",
+        role: "Admin",
+      },
+      createdOn: "2022/08/11",
+      uploadCompleted: true,
+      duration: 19.4,
       learnModule: [
         {
           id: 1,
@@ -345,97 +280,311 @@ export const Universal = {
       courseID: 2,
       courseName: "App Development",
       totalEnrollments: 3234,
-      learnModule: {
-        id: 1,
-        moduleName: "Introduction To the HTML",
-        video: "https://youtube.com/",
-        description: "This is a description",
-        sourceCode: "32gjh45g43g5k4jg",
-        questions: [
-          {
-            key: 1,
-            title: "Which is the World's Best man Ever in the history",
-            options: [
-              { option: "Muhammad P.B.U.H", opValue: "correct" },
-              { option: "Anyone else", opValue: "incorrect1" },
-              { option: "Someone else", opValue: "incorrect2" },
-            ],
-          },
-          {
-            key: 2,
-            title: "Which is the World's Best place",
-            options: [
-              { option: "Meka", opValue: "correct" },
-              { option: "Dubai", opValue: "incorrect1" },
-              { option: "Australia", opValue: "incorrect2" },
-            ],
-          },
-        ],
+      instructor: {
+        name: "Huzaifa",
+        role: "Admin",
       },
+      createdOn: "2022/08/11",
+      uploadCompleted: false,
+      duration: 23.5,
+      learnModule: [
+        {
+          id: 1,
+          moduleName: "Introduction To the HTML",
+          video: "https://youtube.com/",
+          description: "This is a description",
+          sourceCode: "32gjh45g43g5k4jg",
+          questions: [
+            {
+              key: 1,
+              title: "Which is the World's Best man Ever in the history",
+              options: [
+                { option: "Muhammad P.B.U.H", opValue: "correct" },
+                { option: "Anyone else", opValue: "incorrect1" },
+                { option: "Someone else", opValue: "incorrect2" },
+              ],
+            },
+            {
+              key: 2,
+              title: "Which is the World's Best place",
+              options: [
+                { option: "Meka", opValue: "correct" },
+                { option: "Dubai", opValue: "incorrect1" },
+                { option: "Australia", opValue: "incorrect2" },
+              ],
+            },
+          ],
+        },
+        {
+          id: 1,
+          moduleName: "Introduction To the HTML",
+          video: "https://youtube.com/",
+          description: "This is a description",
+          sourceCode: "32gjh45g43g5k4jg",
+          questions: [
+            {
+              key: 1,
+              title: "Which is the World's Best man Ever in the history",
+              options: [
+                { option: "Muhammad P.B.U.H", opValue: "correct" },
+                { option: "Anyone else", opValue: "incorrect1" },
+                { option: "Someone else", opValue: "incorrect2" },
+              ],
+            },
+            {
+              key: 2,
+              title: "Which is the World's Best place",
+              options: [
+                { option: "Meka", opValue: "correct" },
+                { option: "Dubai", opValue: "incorrect1" },
+                { option: "Australia", opValue: "incorrect2" },
+              ],
+            },
+          ],
+        },
+        {
+          id: 1,
+          moduleName: "Introduction To the HTML",
+          video: "https://youtube.com/",
+          description: "This is a description",
+          sourceCode: "32gjh45g43g5k4jg",
+          questions: [
+            {
+              key: 1,
+              title: "Which is the World's Best man Ever in the history",
+              options: [
+                { option: "Muhammad P.B.U.H", opValue: "correct" },
+                { option: "Anyone else", opValue: "incorrect1" },
+                { option: "Someone else", opValue: "incorrect2" },
+              ],
+            },
+            {
+              key: 2,
+              title: "Which is the World's Best place",
+              options: [
+                { option: "Meka", opValue: "correct" },
+                { option: "Dubai", opValue: "incorrect1" },
+                { option: "Australia", opValue: "incorrect2" },
+              ],
+            },
+          ],
+        },
+      ],
     },
     {
       courseID: 3,
       courseName: "Game Development",
       totalEnrollments: 3234,
-      learnModule: {
-        id: 1,
-        moduleName: "Introduction To the HTML",
-        video: "https://youtube.com/",
-        description: "This is a description",
-        sourceCode: "32gjh45g43g5k4jg",
-        questions: [
-          {
-            key: 1,
-            title: "Which is the World's Best man Ever in the history",
-            options: [
-              { option: "Muhammad P.B.U.H", opValue: "correct" },
-              { option: "Anyone else", opValue: "incorrect1" },
-              { option: "Someone else", opValue: "incorrect2" },
-            ],
-          },
-          {
-            key: 2,
-            title: "Which is the World's Best place",
-            options: [
-              { option: "Meka", opValue: "correct" },
-              { option: "Dubai", opValue: "incorrect1" },
-              { option: "Australia", opValue: "incorrect2" },
-            ],
-          },
-        ],
+      instructor: {
+        name: "Huzaifa",
+        role: "Admin",
       },
+      createdOn: "2022/08/11",
+      uploadCompleted: true,
+      duration: 15,
+      learnModule: [
+        {
+          id: 1,
+          moduleName: "Introduction To the HTML",
+          video: "https://youtube.com/",
+          description: "This is a description",
+          sourceCode: "32gjh45g43g5k4jg",
+          questions: [
+            {
+              key: 1,
+              title: "Which is the World's Best man Ever in the history",
+              options: [
+                { option: "Muhammad P.B.U.H", opValue: "correct" },
+                { option: "Anyone else", opValue: "incorrect1" },
+                { option: "Someone else", opValue: "incorrect2" },
+              ],
+            },
+            {
+              key: 2,
+              title: "Which is the World's Best place",
+              options: [
+                { option: "Meka", opValue: "correct" },
+                { option: "Dubai", opValue: "incorrect1" },
+                { option: "Australia", opValue: "incorrect2" },
+              ],
+            },
+          ],
+        },
+        {
+          id: 1,
+          moduleName: "Introduction To the HTML",
+          video: "https://youtube.com/",
+          description: "This is a description",
+          sourceCode: "32gjh45g43g5k4jg",
+          questions: [
+            {
+              key: 1,
+              title: "Which is the World's Best man Ever in the history",
+              options: [
+                { option: "Muhammad P.B.U.H", opValue: "correct" },
+                { option: "Anyone else", opValue: "incorrect1" },
+                { option: "Someone else", opValue: "incorrect2" },
+              ],
+            },
+            {
+              key: 2,
+              title: "Which is the World's Best place",
+              options: [
+                { option: "Meka", opValue: "correct" },
+                { option: "Dubai", opValue: "incorrect1" },
+                { option: "Australia", opValue: "incorrect2" },
+              ],
+            },
+          ],
+        },
+        {
+          id: 1,
+          moduleName: "Introduction To the HTML",
+          video: "https://youtube.com/",
+          description: "This is a description",
+          sourceCode: "32gjh45g43g5k4jg",
+          questions: [
+            {
+              key: 1,
+              title: "Which is the World's Best man Ever in the history",
+              options: [
+                { option: "Muhammad P.B.U.H", opValue: "correct" },
+                { option: "Anyone else", opValue: "incorrect1" },
+                { option: "Someone else", opValue: "incorrect2" },
+              ],
+            },
+            {
+              key: 2,
+              title: "Which is the World's Best place",
+              options: [
+                { option: "Meka", opValue: "correct" },
+                { option: "Dubai", opValue: "incorrect1" },
+                { option: "Australia", opValue: "incorrect2" },
+              ],
+            },
+          ],
+        },
+      ],
     },
     {
       courseID: 4,
       courseName: "OS Development",
       totalEnrollments: 3234,
-      learnModule: {
-        id: 1,
-        moduleName: "Introduction To the HTML",
-        video: "https://youtube.com/",
-        description: "This is a description",
-        sourceCode: "32gjh45g43g5k4jg",
-        questions: [
-          {
-            key: 1,
-            title: "Which is the World's Best man Ever in the history",
-            options: [
-              { option: "Muhammad P.B.U.H", opValue: "correct" },
-              { option: "Anyone else", opValue: "incorrect1" },
-              { option: "Someone else", opValue: "incorrect2" },
-            ],
-          },
-          {
-            key: 2,
-            title: "Which is the World's Best place",
-            options: [
-              { option: "Meka", opValue: "correct" },
-              { option: "Dubai", opValue: "incorrect1" },
-              { option: "Australia", opValue: "incorrect2" },
-            ],
-          },
-        ],
+      instructor: {
+        name: "Huzaifa",
+        role: "Admin",
       },
+      createdOn: "2022/08/11",
+      uploadCompleted: false,
+      duration: 13,
+      learnModule: [
+        {
+          id: 1,
+          moduleName: "Introduction To the HTML",
+          video: "https://youtube.com/",
+          description: "This is a description",
+          sourceCode: "32gjh45g43g5k4jg",
+          questions: [
+            {
+              key: 1,
+              title: "Which is the World's Best man Ever in the history",
+              options: [
+                { option: "Muhammad P.B.U.H", opValue: "correct" },
+                { option: "Anyone else", opValue: "incorrect1" },
+                { option: "Someone else", opValue: "incorrect2" },
+              ],
+            },
+            {
+              key: 2,
+              title: "Which is the World's Best place",
+              options: [
+                { option: "Meka", opValue: "correct" },
+                { option: "Dubai", opValue: "incorrect1" },
+                { option: "Australia", opValue: "incorrect2" },
+              ],
+            },
+          ],
+        },
+        {
+          id: 1,
+          moduleName: "Introduction To the HTML",
+          video: "https://youtube.com/",
+          description: "This is a description",
+          sourceCode: "32gjh45g43g5k4jg",
+          questions: [
+            {
+              key: 1,
+              title: "Which is the World's Best man Ever in the history",
+              options: [
+                { option: "Muhammad P.B.U.H", opValue: "correct" },
+                { option: "Anyone else", opValue: "incorrect1" },
+                { option: "Someone else", opValue: "incorrect2" },
+              ],
+            },
+            {
+              key: 2,
+              title: "Which is the World's Best place",
+              options: [
+                { option: "Meka", opValue: "correct" },
+                { option: "Dubai", opValue: "incorrect1" },
+                { option: "Australia", opValue: "incorrect2" },
+              ],
+            },
+          ],
+        },
+        {
+          id: 1,
+          moduleName: "Introduction To the HTML",
+          video: "https://youtube.com/",
+          description: "This is a description",
+          sourceCode: "32gjh45g43g5k4jg",
+          questions: [
+            {
+              key: 1,
+              title: "Which is the World's Best man Ever in the history",
+              options: [
+                { option: "Muhammad P.B.U.H", opValue: "correct" },
+                { option: "Anyone else", opValue: "incorrect1" },
+                { option: "Someone else", opValue: "incorrect2" },
+              ],
+            },
+            {
+              key: 2,
+              title: "Which is the World's Best place",
+              options: [
+                { option: "Meka", opValue: "correct" },
+                { option: "Dubai", opValue: "incorrect1" },
+                { option: "Australia", opValue: "incorrect2" },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  rewards: [
+    {
+      id: 1,
+      title: "Unstoppable Learner",
+      description: "You have completed 2 courses in 1 month",
+      level: 1,
+      image: "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+    },
+    {
+      id: 2,
+      title: "Accuracy Master",
+      description: "You have correctly answered in complete course",
+      level: 2,
+      image:
+        "https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-google-sva-scholarship-20.png",
+    },
+    {
+      id: 3,
+      title: "Consistent Learner",
+      description: "You have consistently learned 5 courses in a row",
+      level: 3,
+      image:
+        "https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-google-sva-scholarship-20.png",
     },
   ],
 };

@@ -25,11 +25,15 @@ import VuiTypography from "components/VuiTypography";
 
 // React icons
 import { BsCheckCircleFill } from "react-icons/bs";
-import { FaBell } from "react-icons/fa";
+import { FaBell, FaStar } from "react-icons/fa";
 import { IoLogoCss3 } from "react-icons/io";
 import { FaShoppingCart } from "react-icons/fa";
 import { BsCreditCardFill } from "react-icons/bs";
 import { SiDropbox } from "react-icons/si";
+
+import { connect } from "react-redux";
+import { Universal } from "data";
+import { Avatar } from "@mui/material";
 
 // Vision UI Dashboard React example components
 import TimelineItem from "examples/Timeline/TimelineItem";
@@ -37,8 +41,9 @@ import AdobeXD from "examples/Icons/AdobeXD";
 
 // Vision UI Dashboard theme imports
 import palette from "assets/theme/base/colors";
+import { selectCurrentUser } from "redux/user/user.reselect";
 
-function LatestRewards() {
+function LatestRewards({ currentUser }) {
   return (
     <Card className="h-100">
       <VuiBox mb="16px">
@@ -59,36 +64,41 @@ function LatestRewards() {
         </VuiBox>
       </VuiBox>
       <VuiBox>
-        {/* bro use switch statement here with respect to the respective icon */}
-        <TimelineItem
-          icon={<FaBell size="16px" color={palette.info.main} />}
-          title="$2400, Design changes"
-          dateTime="22 DEC 7:20 PM"
-        />
-        <TimelineItem
-          icon={<IoLogoCss3 size="16px" color={palette.error.main} />}
-          title="New order #1832412"
-          dateTime="21 DEC 11 PM"
-        />
-        <TimelineItem
-          icon={<FaShoppingCart size="16px" color={palette.lightblue.main} />}
-          title="Server payments for April"
-          dateTime="21 DEC 9:34 PM"
-        />
-        <TimelineItem
-          icon={<BsCreditCardFill size="16px" color={palette.warning.main} />}
-          title="New card added for order #4395133"
-          dateTime="20 DEC 2:20 AM"
-        />
-        <TimelineItem
-          icon={<SiDropbox size="16px" color={palette.primary.focus} />}
-          title="New card added for order #4394133"
-          dateTime="18 DEC 4:54 AM"
-        />
-        <TimelineItem icon={<AdobeXD size="20px" />} title="New order #9583120" dateTime="17 DEC" />
+        {currentUser.rewards.length !== 0 ? (
+          currentUser.rewards.map((item) => {
+            return Universal.rewards.map((reward) => {
+              if (item === reward.id) {
+                return (
+                  <TimelineItem
+                    icon={
+                      <Avatar
+                        src={reward.image}
+                        sx={{
+                          width: "26px",
+                          height: "26px",
+                          marginTop: "10px",
+                        }}
+                      />
+                    }
+                    title={reward.title}
+                    dateTime={reward.description}
+                  />
+                );
+              }
+            });
+          })
+        ) : (
+          <VuiTypography variant="h6">No Reward</VuiTypography>
+        )}
       </VuiBox>
     </Card>
   );
 }
 
-export default LatestRewards;
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+  };
+};
+
+export default connect(mapStateToProps)(LatestRewards);

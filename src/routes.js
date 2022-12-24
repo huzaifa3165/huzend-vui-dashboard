@@ -56,7 +56,7 @@ import { BsSuitHeartFill, BsFillPersonFill } from "react-icons/bs";
 import { BsTrophyFill } from "react-icons/bs";
 import { IoHome } from "react-icons/io5";
 
-const routes = [
+const routes = (currentUser) => [
   {
     type: "collapse",
     name: "Dashboard",
@@ -94,15 +94,15 @@ const routes = [
     component: Achievments,
     noCollapse: true,
   },
-  {
-    type: "collapse",
-    name: "Support",
-    key: "support",
-    route: "/support",
-    icon: <BsSuitHeartFill size="15px" color="inherit" />,
-    component: Support,
-    noCollapse: true,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Support",
+  //   key: "support",
+  //   route: "/support",
+  //   icon: <BsSuitHeartFill size="15px" color="inherit" />,
+  //   component: Support,
+  //   noCollapse: true,
+  // },
   { type: "title", title: "Account Pages", key: "account-pages" },
   {
     type: "collapse",

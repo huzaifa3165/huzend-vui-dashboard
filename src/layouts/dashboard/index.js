@@ -51,17 +51,22 @@ import { FaShoppingCart } from "react-icons/fa";
 // Data
 import LineChart from "examples/Charts/LineCharts/LineChart";
 import BarChart from "examples/Charts/BarCharts/BarChart";
-import { lineChartDataDashboard } from "layouts/dashboard/data/lineChartData";
+import lineChartDataDashboard from "layouts/dashboard/data/lineChartData";
 import { lineChartOptionsDashboard } from "layouts/dashboard/data/lineChartOptions";
 import { barChartDataDashboard } from "layouts/dashboard/data/barChartData";
 import { barChartOptionsDashboard } from "layouts/dashboard/data/barChartOptions";
+import { connect } from "react-redux";
+import { selectCurrentUser } from "redux/user/user.reselect";
 
-function Dashboard() {
+import { Redirect } from "react-router-dom";
+
+function Dashboard({ currentUser }) {
   const { gradients } = colors;
   const { cardContent } = gradients;
 
   return (
     <DashboardLayout>
+      {currentUser.email === "" ? <Redirect from="*" to="/authentication/sign-in" /> : ""}
       <DashboardNavbar />
       <VuiBox py={3}>
         <VuiBox mb={3}>
@@ -96,7 +101,7 @@ function Dashboard() {
                   </VuiBox>
                   <VuiBox sx={{ height: "310px" }}>
                     <LineChart
-                      lineChartData={lineChartDataDashboard}
+                      lineChartData={lineChartDataDashboard(currentUser)}
                       lineChartOptions={lineChartOptionsDashboard}
                     />
                   </VuiBox>
@@ -286,5 +291,9 @@ function Dashboard() {
     </DashboardLayout>
   );
 }
-
-export default Dashboard;
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+  };
+};
+export default connect(mapStateToProps)(Dashboard);

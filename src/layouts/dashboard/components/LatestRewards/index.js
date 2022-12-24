@@ -39,9 +39,11 @@ import AdobeXD from "examples/Icons/AdobeXD";
 // Vision UI Dashboard theme imports
 import palette from "assets/theme/base/colors";
 
-import { profile } from "../../../../data";
+import { connect } from "react-redux";
+import { Universal } from "../../../../data";
+import { selectCurrentUser } from "redux/user/user.reselect";
 
-function LatestRewards() {
+function LatestRewards({ currentUser }) {
   return (
     <Card className="h-100">
       <VuiBox mb="16px">
@@ -62,27 +64,40 @@ function LatestRewards() {
         </VuiBox>
       </VuiBox>
       <VuiBox>
-        {profile.rewards.map(({ title, image, description }) => {
-          return (
-            <TimelineItem
-              icon={
-                <Avatar
-                  src={image}
-                  sx={{
-                    width: "26px",
-                    height: "26px",
-                    marginTop: "10px",
-                  }}
-                />
+        {currentUser.rewards.length !== 0 ? (
+          currentUser.rewards.map((item) => {
+            return Universal.rewards.map((reward) => {
+              if (item === reward.id) {
+                return (
+                  <TimelineItem
+                    icon={
+                      <Avatar
+                        src={reward.image}
+                        sx={{
+                          width: "26px",
+                          height: "26px",
+                          marginTop: "10px",
+                        }}
+                      />
+                    }
+                    title={reward.title}
+                    dateTime={reward.description}
+                  />
+                );
               }
-              title={title}
-              dateTime={description}
-            />
-          );
-        })}
+            });
+          })
+        ) : (
+          <VuiTypography variant="h6">No Reward</VuiTypography>
+        )}
       </VuiBox>
     </Card>
   );
 }
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+  };
+};
 
-export default LatestRewards;
+export default connect(mapStateToProps)(LatestRewards);
