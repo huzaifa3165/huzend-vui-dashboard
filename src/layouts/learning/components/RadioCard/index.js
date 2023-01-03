@@ -8,19 +8,19 @@ import FormHelperText from "@mui/material/FormHelperText";
 import VuiBox from "components/VuiBox";
 import VuiButton from "components/VuiButton";
 import { Universal } from "../../../../data";
-let Data = [];
-Universal.courses.map((course) => {
-  if (course.courseID === 1) {
-    Data = course.learnModule[0].questions;
-  }
-});
+import { connect } from "react-redux";
+import { setCurrentUser } from "redux/user/user.actions";
+import { useHistory, useLocation } from "react-router-dom";
+import { selectCurrentUser } from "redux/user/user.reselect";
+import { createBrowserHistory } from "history";
 
-const RadioCard = () => {
+const RadioCard = ({ Data, crsID, mdlID, nextModuleUrl, currentUser, setCurrentUser }) => {
   const [ans, setAns] = React.useState("");
   const [error, setError] = React.useState(false);
   const [iteration, setIteration] = React.useState(0);
   const [helperText, setHelperText] = React.useState("Choose wisely");
   const [answers, setAnswers] = React.useState([]);
+  const history = useHistory();
   const handleRadioChange = (event) => {
     setAns(event.target.value);
     setHelperText(" ");
@@ -39,7 +39,36 @@ const RadioCard = () => {
       setIteration(iteration + 1);
     }
   };
-  const handleNextLesson = () => {};
+  const handleNextLesson = (e) => {
+    e.preventDefault();
+    console.log("submitting");
+    let newUser = {};
+    if (crsID === currentUser.currentModule.id && mdlID === currentUser.currentModule.moduleID) {
+      const courseList = currentUser.completedCourses.map((currentCourse) => {
+        if (currentUser.currentModule.id === currentCourse.id) {
+          let crs = currentCourse;
+
+          console.log("before", crs);
+          crs.moduleID += 1;
+          console.log("after", crs);
+          return crs;
+        } else {
+          return currentCourse;
+        }
+      });
+      console.log(crsID, mdlID);
+      setCurrentUser({
+        ...currentUser,
+        currentModule: {
+          ...currentUser.currentModule,
+          moduleID: currentUser.currentModule.moduleID + 1,
+        },
+        completedCourses: courseList,
+      });
+      history.push(`${nextModuleUrl}`);
+      console.log(history);
+    }
+  };
   let i = 0;
   const dataLenght = Data.length;
 
@@ -165,4 +194,15 @@ const RadioCard = () => {
   );
 };
 
-export default RadioCard;
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RadioCard);

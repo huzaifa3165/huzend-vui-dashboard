@@ -196,9 +196,10 @@ export const Universal = {
         {
           id: 1,
           moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -221,11 +222,12 @@ export const Universal = {
           ],
         },
         {
-          id: 1,
-          moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          id: 2,
+          moduleName: "Introduction To the CSS",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -248,11 +250,12 @@ export const Universal = {
           ],
         },
         {
-          id: 1,
-          moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          id: 3,
+          moduleName: "Introduction To the JS",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -291,9 +294,10 @@ export const Universal = {
         {
           id: 1,
           moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -318,9 +322,10 @@ export const Universal = {
         {
           id: 1,
           moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -345,9 +350,10 @@ export const Universal = {
         {
           id: 1,
           moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -386,9 +392,10 @@ export const Universal = {
         {
           id: 1,
           moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -413,9 +420,10 @@ export const Universal = {
         {
           id: 1,
           moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -440,9 +448,10 @@ export const Universal = {
         {
           id: 1,
           moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -481,9 +490,10 @@ export const Universal = {
         {
           id: 1,
           moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -508,9 +518,10 @@ export const Universal = {
         {
           id: 1,
           moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -535,9 +546,10 @@ export const Universal = {
         {
           id: 1,
           moduleName: "Introduction To the HTML",
-          video: "https://youtube.com/",
+          url: "learning/Introduction%20To%20The%20HTML",
+          video: "https://www.youtube.com/embed/FFyR2Ssnakg?rel=0",
           description: "This is a description",
-          sourceCode: "32gjh45g43g5k4jg",
+          sourceCode: "636de3f1258bfe0015555ad8",
           questions: [
             {
               key: 1,
@@ -587,4 +599,107 @@ export const Universal = {
         "https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-google-sva-scholarship-20.png",
     },
   ],
+};
+
+const coursesInit = {
+  coursesEnrolled: [],
+  subscribedToNewsletter: false,
+  posts: [],
+  rewards: [],
+};
+const lastYearTimeSpentFullInit = {
+  1: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  2: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  3: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  4: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  5: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  6: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  7: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  8: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  9: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  10: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  11: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+  12: {
+    w1: [0, 0, 0, 0, 0, 0, 0],
+    w2: [0, 0, 0, 0, 0, 0, 0],
+    w3: [0, 0, 0, 0, 0, 0, 0],
+    w4: [0, 0, 0, 0, 0, 0, 0],
+  },
+};
+export const initialUser = {
+  displayName: "",
+  email: "",
+  createdAt: "",
+  timeSpentToday: 0,
+  courses: coursesInit,
+  photoURL: "",
+  lastYearTimeSpentFull: lastYearTimeSpentFullInit,
+  blogsTraffic: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  rewards: [],
+  completedCourses: [
+    {
+      id: 1,
+      moduleID: 1, // which is completed
+      marks: 20,
+    },
+  ],
+  currentModule: {
+    id: 1,
+    moduleID: 1, // which is not completed
+  },
 };

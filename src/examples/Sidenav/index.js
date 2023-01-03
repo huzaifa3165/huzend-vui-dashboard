@@ -51,14 +51,24 @@ import SimmmpleLogo from "examples/Icons/SimmmpleLogo";
 
 import { auth } from "../../firebase";
 import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { selectCurrentUser } from "redux/user/user.reselect";
+import { Universal } from "../../data";
 
 // function Sidenav({ color, brand, brandName, routes, ...rest }) {
-function Sidenav({ color, brandName, routes, ...rest }) {
+function Sidenav({ currentUser, color, brandName, routes, ...rest }) {
   const [controller, dispatch] = useVisionUIController();
   const { miniSidenav, transparentSidenav } = controller;
   const location = useLocation();
   const { pathname } = location;
   const collapseName = pathname.split("/").slice(1)[0];
+  // Logout Logic
+  const [isSignOut, useIsSignOut] = useState(false);
+  const [redirect, useRedirect] = useState(false);
+  const [learningLink, useLearningLink] = useState("");
+  const changeSignedState = () => {
+    useIsSignOut(true);
+  };
 
   const closeSidenav = () => setMiniSidenav(dispatch, true);
 
@@ -87,11 +97,6 @@ function Sidenav({ color, brandName, routes, ...rest }) {
   }, []);
 
   // Logout Logic
-  const [isSignOut, useIsSignOut] = useState(false);
-  const [redirect, useRedirect] = useState(false);
-  const changeSignedState = () => {
-    useIsSignOut(true);
-  };
   useEffect(() => {
     if (isSignOut) {
       auth.signOut().then(() => {
@@ -99,6 +104,21 @@ function Sidenav({ color, brandName, routes, ...rest }) {
       });
     }
   }, [isSignOut]);
+  useEffect(() => {
+    console.log("I am called");
+    let iteration = true;
+    Universal.courses.map((course) => {
+      if (course.courseID === currentUser.currentModule.id) {
+        course.learnModule.map((module) => {
+          if (module.id === currentUser.currentModule.moduleID && iteration) {
+            iteration = false;
+            useLearningLink(module.moduleName);
+          }
+        });
+      }
+    });
+    console.log(currentUser);
+  }, [currentUser]);
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, route, href }) => {
@@ -122,7 +142,7 @@ function Sidenav({ color, brandName, routes, ...rest }) {
           />
         </Link>
       ) : (
-        <NavLink to={route == "/learning/:learnID" ? "/learning/123" : route} key={key}>
+        <NavLink to={route == "/learning/:learnID" ? `/learning/${learningLink}` : route} key={key}>
           <SidenavCollapse
             color={color}
             key={key}
@@ -274,4 +294,10 @@ Sidenav.propTypes = {
   routes: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default Sidenav;
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+  };
+};
+
+export default connect(mapStateToProps)(Sidenav);

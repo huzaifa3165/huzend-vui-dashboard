@@ -3,15 +3,12 @@ import { useState, useEffect } from "react";
 import { Card, Icon } from "@mui/material";
 import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
-import { profile } from "../../../../data";
 import gif from "assets/images/cardimgfree.png";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { selectCurrentUser } from "redux/user/user.reselect";
 const WelcomeMark = ({ currentUser }) => {
-  const [redirectToLearn, useRedirectToLearn] = useState(false);
-  const learningRedirect = () => {
-    useRedirectToLearn(true);
-  };
+  const [redirect, useRedirect] = useState(false);
   return (
     <Card
       sx={() => ({
@@ -22,6 +19,7 @@ const WelcomeMark = ({ currentUser }) => {
         backgroundPosition: "50%",
       })}
     >
+      {redirect ? <Redirect from="*" to="/learning/123" /> : ""}
       <VuiBox height="100%" display="flex" flexDirection="column" justifyContent="space-between">
         <VuiBox>
           <VuiTypography color="text" variant="button" fontWeight="regular" mb="12px">
@@ -29,7 +27,6 @@ const WelcomeMark = ({ currentUser }) => {
           </VuiTypography>
           <VuiTypography color="white" variant="h3" fontWeight="bold" mb="18px">
             {currentUser ? currentUser.displayName : {}}
-            {console.log(currentUser)}
           </VuiTypography>
           <VuiTypography color="text" variant="h6" fontWeight="regular" mb="auto">
             Glad to see you again!
@@ -38,7 +35,9 @@ const WelcomeMark = ({ currentUser }) => {
         </VuiBox>
         <VuiTypography
           component="a"
-          onClick={learningRedirect}
+          onClick={() => {
+            useRedirect(true);
+          }}
           variant="button"
           color="white"
           fontWeight="regular"

@@ -4,7 +4,7 @@ import VuiBox from "components/VuiBox";
 import { CardMedia } from "@mui/material";
 import { Card } from "@mui/material";
 
-const SourceCode = () => {
+const SourceCode = ({ sourceCode }) => {
   return (
     <>
       <VuiTypography color="white" my={1} mb={2} variant="h4">
@@ -13,7 +13,7 @@ const SourceCode = () => {
       <VuiBox mb={2}>
         <CardMedia
           component="iframe"
-          src="https://www.thiscodeworks.com/embed/636de3f1258bfe0015555ad8"
+          src={`https://www.thiscodeworks.com/embed/${sourceCode}`}
           sx={{ width: "96%", height: "208px", overflow: "hidden", borderRadius: "none" }}
           frameBorder="0"
         />

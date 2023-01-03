@@ -174,11 +174,7 @@ function DashboardNavbar({ absolute, light, isMini, currentUser }) {
               {currentUser ? (
                 <Link to="/profile">
                   <IconButton sx={navbarIconButton}>
-                    <VuiAvatar
-                      src="https://res.cloudinary.com/demo/image/twitter/1330457336.jpg"
-                      alt="proile"
-                      size="xs"
-                    ></VuiAvatar>
+                    <VuiAvatar src={currentUser.photoURL} alt="profile" size="xs"></VuiAvatar>
                   </IconButton>
                 </Link>
               ) : (

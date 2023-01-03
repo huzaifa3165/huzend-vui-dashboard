@@ -1,6 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
+import { initialUser } from "data";
 
 const lastYearTimeSpentFullInit = {
   1: {
@@ -126,23 +127,16 @@ export const firestore = firebase.firestore();
 export const createNewUserIfExist = async (authenticatedUser, additional) => {
   const userRef = firestore.doc(`users/${authenticatedUser.uid}`);
   const snapShot = await userRef.get();
-  console.log("This is snapshot", snapShot);
   if (!snapShot.exists) {
     const { displayName, email, photoURL } = authenticatedUser;
     const createdAt = new Date();
     try {
       await userRef.set({
+        ...initialUser,
         displayName,
         email,
         createdAt,
-        timeSpentToday: 0,
-        courses: coursesInit,
-        photoURL: photoURL
-          ? photoURL
-          : "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/319/robot_1f916.png",
-        lastYearTimeSpentFull: lastYearTimeSpentFullInit,
-        blogsTraffic: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        rewards: [2],
+        photoURL: photoURL ? photoURL : "",
         ...additional,
       });
     } catch (error) {

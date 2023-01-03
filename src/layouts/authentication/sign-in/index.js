@@ -62,7 +62,6 @@ function SignIn({ currentUser }) {
         if (error.code === "auth/user-not-found") alert("No User Exist with this email!");
       });
   };
-  console.log(currentUser);
   return (
     <CoverLayout
       title="Nice to see you!"
