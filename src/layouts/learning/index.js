@@ -20,7 +20,7 @@ import { useLocation } from "react-router-dom";
 
 const Learning = ({ currentUser }) => {
   const [fetchData, useFetchData] = useState(undefined);
-  const learnID = useLocation().pathname; // can change the pathname by adding to the redux
+  const learnID = useLocation().pathname;
   const learningDataFetch = async (learnID) => {
     try {
       const res = await axios.post("/learningdata", { title: learnID });
