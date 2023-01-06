@@ -6,3 +6,9 @@ export const setCurrentUser = (user) => {
     payload: user,
   };
 };
+export const setUniversal = (user) => {
+  return {
+    type: userTypes.SET_UNIVERSAL,
+    payload: user,
+  };
+};

@@ -48,12 +48,15 @@ import routes from "routes";
 // Vision UI Dashboard React contexts
 import { useVisionUIController, setMiniSidenav, setOpenConfigurator, setIsLoggedIn } from "context";
 
+import axios from "./data/axios";
 import { auth, createNewUserIfExist } from "./firebase";
 import { selectCurrentUser } from "redux/user/user.reselect";
 import { setCurrentUser } from "redux/user/user.actions";
 import { initialUser } from "data";
+import { selectUniversal } from "redux/user/user.reselect";
+import { setUniversal } from "redux/user/user.actions";
 
-const App = ({ currentUser, setCurrentUser }) => {
+const App = ({ currentUser, universal, setUniversal, setCurrentUser }) => {
   const [controller, dispatch] = useVisionUIController();
   const { miniSidenav, direction, layout, openConfigurator, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
@@ -89,6 +92,12 @@ const App = ({ currentUser, setCurrentUser }) => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
+
+  useEffect(async () => {
+    const res = await axios.get("/universal");
+    console.log(res);
+    setUniversal(res.data);
+  }, []);
 
   useEffect(() => {
     const unsubscribeAuthOnCalling = auth.onAuthStateChanged(async (user) => {
@@ -208,12 +217,14 @@ const App = ({ currentUser, setCurrentUser }) => {
 const mapStateToProps = (state) => {
   return {
     currentUser: selectCurrentUser(state),
+    universal: selectUniversal(state),
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+    setUniversal: (user) => dispatch(setUniversal(user)),
   };
 };
 

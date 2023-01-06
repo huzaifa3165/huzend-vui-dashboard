@@ -30,13 +30,32 @@ import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 
 // Data
-import authorsTableData from "layouts/courses/data/authorsTableData";
+import { DataFunc } from "layouts/courses/data/authorsTableData";
 import projectsTableData from "layouts/courses/data/projectsTableData";
 import { connect } from "react-redux";
 import { selectCurrentUser } from "redux/user/user.reselect";
-function Courses({ currentUser }) {
-  const { columns, rows } = authorsTableData;
+import { setCurrentUser } from "redux/user/user.actions";
+import { useEffect, useState } from "react";
+import axios from "../../data/axios";
+import { selectUniversal } from "redux/user/user.reselect";
+
+function Courses({ currentUser, universal, setCurrentUser }) {
+  const [courses, useCourses] = useState(undefined);
   const { columns: prCols, rows: prRows } = projectsTableData(currentUser);
+  const coursesDataFetch = async () => {
+    try {
+      const res = await axios.get("/courses");
+      useCourses(res.data);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    coursesDataFetch();
+  }, []);
+
+  const { columns, rows } = DataFunc(courses, currentUser, setCurrentUser, universal);
 
   return (
     <DashboardLayout>
@@ -63,7 +82,7 @@ function Courses({ currentUser }) {
                 },
               }}
             >
-              <Table columns={columns} rows={rows} />
+              {!(rows === "") ? <Table columns={columns} rows={rows} /> : ""}
             </VuiBox>
           </Card>
         </VuiBox>
@@ -91,7 +110,9 @@ function Courses({ currentUser }) {
               <Table columns={prCols} rows={prRows} />
             </VuiBox>
           ) : (
-            <VuiTypography variant="h6">No Course Enrolled</VuiTypography>
+            <VuiTypography variant="body2" sx={{ marginTop: "5px" }}>
+              0 course enrolled
+            </VuiTypography>
           )}
         </Card>
       </VuiBox>
@@ -103,7 +124,12 @@ function Courses({ currentUser }) {
 const mapStateToProps = (state) => {
   return {
     currentUser: selectCurrentUser(state),
+    universal: selectUniversal(state),
   };
 };
-
-export default connect(mapStateToProps)(Courses);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCurrentUser: (profile) => dispatch(setCurrentUser(profile)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Courses);

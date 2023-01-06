@@ -1,24 +1,22 @@
 import React from "react";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import VuiTypography from "components/VuiTypography";
 import VuiBox from "components/VuiBox";
-import { useParams } from "react-router-dom";
 import { Card } from "@mui/material";
-import { CardMedia } from "@mui/material";
 import RadioCard from "./components/RadioCard";
 import Footer from "examples/Footer";
 import Description from "./components/description";
 import SourceCode from "./components/SourceCode";
 import Video from "./components/Video";
-import { Universal } from "../../data";
 import axios from "../../data/axios";
 import { useState, useEffect } from "react";
 import { selectCurrentUser } from "redux/user/user.reselect";
 import { connect } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { selectCongratulationsCourse } from "redux/profile/profile.reselect";
+import Congratulations from "examples/Congratulations";
 
-const Learning = ({ currentUser }) => {
+const Learning = ({ currentUser, congratulations }) => {
   const [fetchData, useFetchData] = useState(undefined);
   const learnID = useLocation().pathname;
   const learningDataFetch = async (learnID) => {
@@ -34,7 +32,16 @@ const Learning = ({ currentUser }) => {
   }, [currentUser]);
   // const { data, courseID, moduleID } = fetchData;
 
-  return (
+  return congratulations ? (
+    <>
+      <DashboardLayout>
+        <DashboardNavbar />
+
+        <Congratulations courseName={congratulations.courseName} />
+        <Footer />
+      </DashboardLayout>
+    </>
+  ) : (
     <DashboardLayout>
       <DashboardNavbar />
       {console.log(fetchData)}
@@ -65,6 +72,7 @@ const Learning = ({ currentUser }) => {
 const mapStateToProps = (state) => {
   return {
     currentUser: selectCurrentUser(state),
+    congratulations: selectCongratulationsCourse(state),
   };
 };
 

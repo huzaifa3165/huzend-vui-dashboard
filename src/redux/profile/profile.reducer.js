@@ -1,37 +1,20 @@
-import { cartType } from "./profile.types";
-import { addItemToCart, decrementFromCartFunc } from "./profile.utils";
+import { profileTypes } from "./profile.types";
 
 const INITIAL_STATE = {
-  hidden: true,
-  cartItems: [],
+  congratulations: { course: null },
 };
 
-const cartReducer = (state = INITIAL_STATE, action) => {
+const profileReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case cartType.TOGGLE_CART_HIDDEN:
+    case profileTypes.ADD_CONGRATULATIONS:
       return {
         ...state,
-        hidden: !state.hidden,
+        congratulations: action.payload,
       };
-    case cartType.ADD_ITEM:
-      return {
-        ...state,
 
-        cartItems: addItemToCart(state.cartItems, action.payload),
-      };
-    case cartType.REMOVE_ITEM:
-      return {
-        ...state,
-        cartItems: state.cartItems.filter((item) => item.id !== action.payload.id),
-      };
-    case cartType.DECREMENT_ITEM:
-      return {
-        ...state,
-        cartItems: decrementFromCartFunc(state.cartItems, action.payload),
-      };
     default:
       return state;
   }
 };
 
-export default cartReducer;
+export default profileReducer;

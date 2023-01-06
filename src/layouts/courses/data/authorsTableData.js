@@ -63,54 +63,111 @@ function Function({ job, org }) {
     </VuiBox>
   );
 }
+function naturalNumbers(n) {
+  let result = [];
+  for (let i = 1; i <= n; i++) {
+    result.push(i);
+  }
+  return result;
+}
 
-export default {
-  columns: [
-    { name: "name", align: "left" },
-    { name: "instructor", align: "left" },
-    { name: "upload", align: "center" },
-    { name: "date", align: "center" },
-    { name: "action", align: "center" },
-  ],
+export const DataFunc = (courses, currentUser, setCurrentUser, universal) => {
+  return {
+    columns: [
+      { name: "name", align: "left" },
+      { name: "instructor", align: "left" },
+      { name: "upload", align: "center" },
+      { name: "date", align: "center" },
+      { name: "action", align: "center" },
+    ],
 
-  rows: Universal.courses.map((course) => {
-    return {
-      name: <Author image={avatar4} name={course.courseName} email={`${course.duration} Hrs`} />,
-      instructor: <Function job={course.instructor.name} org={course.instructor.role} />,
-      upload: (
-        <VuiBadge
-          variant="standard"
-          badgeContent={course.uploadCompleted ? "Complete" : "Ongoing"}
-          color={course.uploadCompleted ? "success" : "white"}
-          size="xs"
-          container
-          sx={
-            course.uploadCompleted
-              ? ({ palette: { white, success }, borders: { borderRadius, borderWidth } }) => ({
-                  background: success.main,
-                  border: `${borderWidth[1]} solid ${success.main}`,
-                  borderRadius: borderRadius.md,
-                  color: white.main,
-                })
-              : ({ palette: { white }, borders: { borderRadius, borderWidth } }) => ({
-                  background: "unset",
-                  border: `${borderWidth[1]} solid ${white.main}`,
-                  borderRadius: borderRadius.md,
-                  color: white.main,
-                })
-          }
-        />
-      ),
-      date: (
-        <VuiTypography variant="caption" color="white" fontWeight="medium">
-          {course.createdOn}
-        </VuiTypography>
-      ),
-      action: (
-        <VuiTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          Enroll
-        </VuiTypography>
-      ),
-    };
-  }),
+    rows: courses
+      ? courses.map((course) => {
+          return {
+            name: (
+              <Author image={avatar4} name={course.courseName} email={`${course.duration} Hrs`} />
+            ),
+            instructor: (
+              <Function job={course.instructors[0].name} org={course.instructors[1].name} />
+            ),
+            upload: (
+              <VuiBadge
+                variant="standard"
+                badgeContent={course.uploadCompleted ? "Complete" : "Ongoing"}
+                color={course.uploadCompleted ? "success" : "white"}
+                size="xs"
+                container
+                sx={
+                  course.uploadCompleted
+                    ? ({
+                        palette: { white, success },
+                        borders: { borderRadius, borderWidth },
+                      }) => ({
+                        background: success.main,
+                        border: `${borderWidth[1]} solid ${success.main}`,
+                        borderRadius: borderRadius.md,
+                        color: white.main,
+                      })
+                    : ({ palette: { white }, borders: { borderRadius, borderWidth } }) => ({
+                        background: "unset",
+                        border: `${borderWidth[1]} solid ${white.main}`,
+                        borderRadius: borderRadius.md,
+                        color: white.main,
+                      })
+                }
+              />
+            ),
+            date: (
+              <VuiTypography variant="caption" color="white" fontWeight="medium">
+                {course.createdOn}
+              </VuiTypography>
+            ),
+            action: (
+              <VuiTypography
+                value={course.courseID}
+                component="a"
+                variant="caption"
+                color="text"
+                fontWeight="medium"
+                sx={{ cursor: "pointer" }}
+                onClick={(e) => {
+                  let iteration = true;
+                  universal.courses.map((course) => {
+                    if (course.courseID == e.target.getAttribute("value") && iteration) {
+                      iteration = false;
+                      let moduleId;
+                      currentUser.completedCourses.map((crs) => {
+                        if (crs.id === course.courseID) {
+                          moduleId = crs.moduleID;
+                        }
+                      });
+                      let tasksArray = moduleId === 0 ? [] : naturalNumbers(moduleId);
+                      const newCourses = {
+                        courseName: course.courseName,
+                        courseID: course.courseID,
+                        activelyTaking: false,
+                        taskCompleted: tasksArray,
+                        instructors: course.instructors,
+                        students: course.totalEnrollments,
+                      };
+                      const { courses } = currentUser;
+                      const { coursesEnrolled } = courses;
+                      setCurrentUser({
+                        ...currentUser,
+                        courses: {
+                          ...courses,
+                          coursesEnrolled: [...coursesEnrolled, newCourses],
+                        },
+                      });
+                    }
+                  });
+                }}
+              >
+                Enroll
+              </VuiTypography>
+            ),
+          };
+        })
+      : "",
+  };
 };
