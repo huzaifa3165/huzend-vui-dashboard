@@ -32,6 +32,7 @@ import avatar5 from "assets/images/avatar5.png";
 import avatar6 from "assets/images/avatar6.png";
 
 import { Universal } from "../../../data";
+import { addToDB } from "../../../firebase";
 
 function Author({ image, name, email }) {
   return (
@@ -132,8 +133,9 @@ export const DataFunc = (courses, currentUser, setCurrentUser, universal) => {
                 sx={{ cursor: "pointer" }}
                 onClick={(e) => {
                   let iteration = true;
+                  const eventCourseId = parseInt(e.target.getAttribute("value"));
                   universal.courses.map((course) => {
-                    if (course.courseID == e.target.getAttribute("value") && iteration) {
+                    if (course.courseID === eventCourseId && iteration) {
                       iteration = false;
                       let moduleId;
                       currentUser.completedCourses.map((crs) => {
@@ -152,11 +154,30 @@ export const DataFunc = (courses, currentUser, setCurrentUser, universal) => {
                       };
                       const { courses } = currentUser;
                       const { coursesEnrolled } = courses;
+                      let newList = [...coursesEnrolled, newCourses];
+                      coursesEnrolled.map((crsEnrolled) => {
+                        if (course.courseID === crsEnrolled.courseID) {
+                          newList = coursesEnrolled;
+                        }
+                      });
+
+                      addToDB(
+                        "users",
+                        {
+                          ...currentUser,
+                          courses: {
+                            ...courses,
+                            coursesEnrolled: newList,
+                          },
+                        },
+                        currentUser.id
+                      );
+
                       setCurrentUser({
                         ...currentUser,
                         courses: {
                           ...courses,
-                          coursesEnrolled: [...coursesEnrolled, newCourses],
+                          coursesEnrolled: newList,
                         },
                       });
                     }

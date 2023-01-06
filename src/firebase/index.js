@@ -2,6 +2,8 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import { initialUser } from "data";
+import { initializeApp } from "firebase/app";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
 
 const lastYearTimeSpentFullInit = {
   1: {
@@ -196,4 +198,14 @@ export const signInWithGithub = () => {
   const provider = new firebase.auth.GithubAuthProvider();
   return auth.signInWithPopup(provider);
 };
+
+// Initialize Firebase
+const app = initializeApp(config);
+const db = getFirestore(app);
+
+export const addToDB = async (col, data, id) => {
+  await setDoc(doc(db, col, id), data);
+  console.log("added document with ID: ", id);
+};
+
 export default firebase;

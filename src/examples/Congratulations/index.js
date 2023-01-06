@@ -7,12 +7,41 @@ import { connect } from "react-redux";
 import gif from "../../assets/images/achievement.png";
 import { addCongratulations } from "redux/profile/profile.actions";
 import { useHistory } from "react-router-dom";
+import { setCurrentUser } from "redux/user/user.actions";
+import { selectCurrentUser } from "redux/user/user.reselect";
+import { selectCongratulationsCourse } from "redux/profile/profile.reselect";
+import { addToDB } from "../../firebase";
 
-const Congratulations = ({ courseName, setCongratulations }) => {
+const Congratulations = ({
+  courseName,
+  courseId,
+  setCongratulations,
+  currentUser,
+  setCurrentUser,
+}) => {
   const history = useHistory();
   const handleContinue = (e) => {
     e.preventDefault();
+    const newArray = currentUser.courses.coursesEnrolled.filter((obj) => obj.courseID !== courseId);
     setCongratulations({ course: null });
+    addToDB(
+      "users",
+      {
+        ...currentUser,
+        courses: {
+          ...currentUser.courses,
+          coursesEnrolled: newArray,
+        },
+      },
+      currentUser.id
+    );
+    setCurrentUser({
+      ...currentUser,
+      courses: {
+        ...currentUser.courses,
+        coursesEnrolled: newArray,
+      },
+    });
     history.push("/courses");
   };
   return (
@@ -50,10 +79,17 @@ const Congratulations = ({ courseName, setCongratulations }) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
   return {
-    setCongratulations: (profile) => dispatch(addCongratulations(profile)),
+    currentUser: selectCurrentUser(state),
   };
 };
 
-export default connect(null, mapDispatchToProps)(Congratulations);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCongratulations: (profile) => dispatch(addCongratulations(profile)),
+    setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Congratulations);

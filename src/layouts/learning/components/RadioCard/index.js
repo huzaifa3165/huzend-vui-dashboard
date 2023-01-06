@@ -15,6 +15,7 @@ import { selectCurrentUser } from "redux/user/user.reselect";
 import { createBrowserHistory } from "history";
 import { addCongratulations } from "redux/profile/profile.actions";
 import { selectCongratulations } from "redux/profile/profile.reselect";
+import { addToDB } from "../../../../firebase";
 
 const RadioCard = ({
   Data,
@@ -65,6 +66,18 @@ const RadioCard = ({
           }
         });
         console.log(crsID, mdlID);
+        addToDB(
+          "users",
+          {
+            ...currentUser,
+            currentModule: {
+              ...currentUser.currentModule,
+              moduleID: currentUser.currentModule.moduleID + 1,
+            },
+            completedCourses: courseList,
+          },
+          currentUser.id
+        );
         setCurrentUser({
           ...currentUser,
           currentModule: {

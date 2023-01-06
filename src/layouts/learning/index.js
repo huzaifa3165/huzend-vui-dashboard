@@ -37,7 +37,10 @@ const Learning = ({ currentUser, congratulations }) => {
       <DashboardLayout>
         <DashboardNavbar />
 
-        <Congratulations courseName={congratulations.courseName} />
+        <Congratulations
+          courseName={congratulations.courseName}
+          courseId={congratulations.courseId}
+        />
         <Footer />
       </DashboardLayout>
     </>
