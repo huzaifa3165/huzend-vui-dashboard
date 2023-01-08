@@ -41,7 +41,7 @@ import { selectUniversal } from "redux/user/user.reselect";
 
 function Courses({ currentUser, universal, setCurrentUser }) {
   const [courses, useCourses] = useState(undefined);
-  const { columns: prCols, rows: prRows } = projectsTableData(currentUser);
+  const { columns: prCols, rows: prRows } = projectsTableData(currentUser, universal);
   const coursesDataFetch = async () => {
     try {
       const res = await axios.get("/courses");

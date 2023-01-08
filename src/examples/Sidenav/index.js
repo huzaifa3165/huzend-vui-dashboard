@@ -19,7 +19,7 @@
 import { useState, useEffect } from "react";
 
 // react-router-dom components
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, useHistory } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -54,9 +54,10 @@ import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { selectCurrentUser } from "redux/user/user.reselect";
 import { Universal } from "../../data";
+import { selectUniversal } from "redux/user/user.reselect";
 
 // function Sidenav({ color, brand, brandName, routes, ...rest }) {
-function Sidenav({ currentUser, color, brandName, routes, ...rest }) {
+function Sidenav({ currentUser, universal, color, brandName, routes, ...rest }) {
   const [controller, dispatch] = useVisionUIController();
   const { miniSidenav, transparentSidenav } = controller;
   const location = useLocation();
@@ -66,6 +67,7 @@ function Sidenav({ currentUser, color, brandName, routes, ...rest }) {
   const [isSignOut, useIsSignOut] = useState(false);
   const [redirect, useRedirect] = useState(false);
   const [learningLink, useLearningLink] = useState("");
+  const history = useHistory();
   const changeSignedState = () => {
     useIsSignOut(true);
   };
@@ -107,16 +109,19 @@ function Sidenav({ currentUser, color, brandName, routes, ...rest }) {
   useEffect(() => {
     console.log("I am called");
     let iteration = true;
-    Universal.courses.map((course) => {
-      if (course.courseID === currentUser.currentModule.id) {
-        course.learnModule.map((module) => {
-          if (module.id === currentUser.currentModule.moduleID && iteration) {
-            iteration = false;
-            useLearningLink(module.moduleName);
-          }
-        });
-      }
-    });
+    if (universal) {
+      universal.courses.map((course) => {
+        if (course.courseID === currentUser.currentModule.id) {
+          course.learnModule.map((module) => {
+            if (module.id === currentUser.currentModule.moduleID && iteration) {
+              iteration = false;
+              useLearningLink(module.moduleName);
+            }
+          });
+        }
+      });
+    }
+
     console.log(currentUser);
   }, [currentUser]);
 
@@ -142,7 +147,16 @@ function Sidenav({ currentUser, color, brandName, routes, ...rest }) {
           />
         </Link>
       ) : (
-        <NavLink to={route == "/learning/:learnID" ? `/learning/${learningLink}` : route} key={key}>
+        <NavLink
+          to={
+            route == "/learning/:learnID"
+              ? learningLink !== ""
+                ? `/learning/${learningLink}`
+                : "/courses"
+              : route
+          }
+          key={key}
+        >
           <SidenavCollapse
             color={color}
             key={key}
@@ -297,6 +311,7 @@ Sidenav.propTypes = {
 const mapStateToProps = (state) => {
   return {
     currentUser: selectCurrentUser(state),
+    universal: selectUniversal(state),
   };
 };
 

@@ -691,13 +691,7 @@ export const initialUser = {
   lastYearTimeSpentFull: lastYearTimeSpentFullInit,
   blogsTraffic: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   rewards: [],
-  completedCourses: [
-    {
-      id: 1,
-      moduleID: 1, // which is completed
-      marks: 20,
-    },
-  ],
+  completedCourses: [],
   currentModule: {
     id: 1,
     moduleID: 1, // which is not completed

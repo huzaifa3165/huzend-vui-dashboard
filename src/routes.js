@@ -47,6 +47,7 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import Learning from "layouts/learning";
+import Module from "layouts/module";
 
 // Vision UI Dashboard React icons
 import { IoDesktop, IoRocketSharp, IoBook } from "react-icons/io5";
@@ -55,8 +56,9 @@ import { BsSuitHeartFill, BsFillPersonFill } from "react-icons/bs";
 
 import { BsTrophyFill } from "react-icons/bs";
 import { IoHome } from "react-icons/io5";
+import { LocalLibraryRounded } from "@mui/icons-material";
 
-const routes = (currentUser) => [
+const routes = () => [
   {
     type: "collapse",
     name: "Dashboard",
@@ -82,6 +84,15 @@ const routes = (currentUser) => [
     route: "/courses",
     icon: <IoDesktop size="15px" color="inherit" />,
     component: Courses,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Course Module",
+    key: "module",
+    route: "/module",
+    icon: <LocalLibraryRounded size="15px" color="inherit" />,
+    component: Module,
     noCollapse: true,
   },
 

@@ -86,8 +86,7 @@ const action = (
   </Icon>
 );
 
-const projectsTableData = (currentUser) => {
-  console.log(currentUser);
+const projectsTableData = (currentUser, universal) => {
   return {
     columns: [
       { name: "title", align: "left" },
@@ -97,7 +96,7 @@ const projectsTableData = (currentUser) => {
     ],
 
     rows: currentUser.courses.coursesEnrolled.map((data) => {
-      Universal.courses.map((course) => {
+      universal.courses.map((course) => {
         if (data.courseID === course.courseID) {
           tasksTotalLength = course.learnModule.length;
         }

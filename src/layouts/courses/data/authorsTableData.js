@@ -152,14 +152,26 @@ export const DataFunc = (courses, currentUser, setCurrentUser, universal) => {
                         instructors: course.instructors,
                         students: course.totalEnrollments,
                       };
-                      const { courses } = currentUser;
+                      const { courses, completedCourses } = currentUser;
                       const { coursesEnrolled } = courses;
-                      let newList = [...coursesEnrolled, newCourses];
+                      let newCoursesList = [...coursesEnrolled, newCourses];
                       coursesEnrolled.map((crsEnrolled) => {
                         if (course.courseID === crsEnrolled.courseID) {
-                          newList = coursesEnrolled;
+                          newCoursesList = coursesEnrolled;
                         }
                       });
+                      let newCompletedCourses = [
+                        ...completedCourses,
+                        { marks: 0, moduleID: 0, id: course.courseID },
+                      ];
+                      let modID = 1;
+                      completedCourses.map((completedCrs) => {
+                        if (course.courseID === completedCrs.id) {
+                          newCompletedCourses = completedCourses;
+                          modID = completedCrs.moduleID + 1;
+                        }
+                      });
+                      let newCurrentModule = { id: course.courseID, moduleID: modID };
 
                       addToDB(
                         "users",
@@ -167,8 +179,10 @@ export const DataFunc = (courses, currentUser, setCurrentUser, universal) => {
                           ...currentUser,
                           courses: {
                             ...courses,
-                            coursesEnrolled: newList,
+                            coursesEnrolled: newCoursesList,
                           },
+                          completedCourses: newCompletedCourses,
+                          currentModule: newCurrentModule,
                         },
                         currentUser.id
                       );
@@ -177,8 +191,10 @@ export const DataFunc = (courses, currentUser, setCurrentUser, universal) => {
                         ...currentUser,
                         courses: {
                           ...courses,
-                          coursesEnrolled: newList,
+                          coursesEnrolled: newCoursesList,
                         },
+                        completedCourses: newCompletedCourses,
+                        currentModule: newCurrentModule,
                       });
                     }
                   });

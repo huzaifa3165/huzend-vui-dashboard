@@ -1,22 +1,4 @@
-/*!
-
-=========================================================
-* Vision UI Free React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/vision-ui-free-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
-* Licensed under MIT (https://github.com/creativetimofficial/vision-ui-free-react/blob/master LICENSE.md)
-
-* Design and Coded by Simmmple & Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the software.
-
-*/
-
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 // react-router components
 import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 
@@ -34,19 +16,12 @@ import Configurator from "examples/Configurator";
 
 // Vision UI Dashboard React themes
 import theme from "assets/theme";
-import themeRTL from "assets/theme/theme-rtl";
-
-// RTL plugins
-import rtlPlugin from "stylis-plugin-rtl";
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
-
 import { connect } from "react-redux";
 // Vision UI Dashboard React routes
 import routes from "routes";
 
 // Vision UI Dashboard React contexts
-import { useVisionUIController, setMiniSidenav, setOpenConfigurator, setIsLoggedIn } from "context";
+import { useVisionUIController, setMiniSidenav, setOpenConfigurator } from "context";
 
 import axios from "./data/axios";
 import { auth, createNewUserIfExist } from "./firebase";
@@ -60,7 +35,6 @@ const App = ({ currentUser, universal, setUniversal, setCurrentUser }) => {
   const [controller, dispatch] = useVisionUIController();
   const { miniSidenav, direction, layout, openConfigurator, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
-  const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
 
   // Open sidenav when mouse enter on mini sidenav
@@ -150,42 +124,12 @@ const App = ({ currentUser, universal, setUniversal, setCurrentUser }) => {
       onClick={handleConfiguratorOpen}
     >
       <Icon fontSize="default" color="inherit">
-        link
+        local_library
       </Icon>
     </VuiBox>
   );
 
-  return direction === "rtl" ? (
-    <CacheProvider value={rtlCache}>
-      <ThemeProvider theme={themeRTL}>
-        <CssBaseline />
-        {layout === "dashboard" && (
-          <>
-            <Sidenav
-              color={sidenavColor}
-              brand=""
-              brandName="HUZEND"
-              routes={routes(currentUser)}
-              onMouseEnter={handleOnMouseEnter}
-              onMouseLeave={handleOnMouseLeave}
-            />
-            <Configurator />
-            {configsButton}
-          </>
-        )}
-        {layout === "vr" && <Configurator />}
-        {currentUser.email !== "" ? (
-          <Switch>
-            {getRoutes(routes(currentUser))}
-            <Redirect from="*" to="/dashboard" />
-            {/* ////////////////////////////////////////////////////////////////////////////// change the dashboard to sign in with respect to current user */}
-          </Switch>
-        ) : (
-          <Redirect from="*" to="/authentication/sign-in" />
-        )}
-      </ThemeProvider>
-    </CacheProvider>
-  ) : (
+  return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {layout === "dashboard" && (
