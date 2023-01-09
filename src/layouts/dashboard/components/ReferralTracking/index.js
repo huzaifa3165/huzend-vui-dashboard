@@ -9,19 +9,20 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Universal } from "../../../../data";
 import { connect } from "react-redux";
 import { selectCurrentUser } from "redux/user/user.reselect";
+import { selectUniversal } from "redux/user/user.reselect";
 
-function ReferralTracking({ currentUser }) {
+function ReferralTracking({ currentUser, universal }) {
   const { info, gradients } = colors;
   const { cardContent } = gradients;
   let activeCourse = {};
-  if (currentUser) {
+  if (currentUser.displayName) {
     currentUser.courses.coursesEnrolled.map((course) => {
       if (course.activelyTaking) {
         activeCourse = course;
       }
     });
     let activeCourseUniversal = {};
-    Universal.courses.map((course) => {
+    universal.courses.map((course) => {
       if (course.courseID === activeCourse.courseID) {
         activeCourseUniversal = course;
       }
@@ -219,11 +220,14 @@ function ReferralTracking({ currentUser }) {
         </VuiBox>
       </Card>
     );
+  } else {
+    return "";
   }
 }
 const mapStateToProps = (state) => {
   return {
     currentUser: selectCurrentUser(state),
+    universal: selectUniversal(state),
   };
 };
 

@@ -16,6 +16,7 @@ import { createBrowserHistory } from "history";
 import { addCongratulations } from "redux/profile/profile.actions";
 import { selectCongratulations } from "redux/profile/profile.reselect";
 import { addToDB } from "../../../../firebase";
+import { selectUniversal } from "redux/user/user.reselect";
 
 const RadioCard = ({
   Data,
@@ -26,6 +27,7 @@ const RadioCard = ({
   setCurrentUser,
   congratulations,
   setCongratulations,
+  universal,
 }) => {
   const [ans, setAns] = React.useState("");
   const [error, setError] = React.useState(false);
@@ -53,8 +55,12 @@ const RadioCard = ({
   };
   const handleNextLesson = (e) => {
     e.preventDefault();
-    if (!(nextModuleUrl === "")) {
-      if (crsID === currentUser.currentModule.id && mdlID === currentUser.currentModule.moduleID) {
+
+    if (crsID === currentUser.currentModule.id && mdlID === currentUser.currentModule.moduleID) {
+      console.log("this is");
+      console.log(crsID, mdlID);
+      if (!(nextModuleUrl === "")) {
+        console.log("a");
         const courseList = currentUser.completedCourses.map((currentCourse) => {
           if (currentUser.currentModule.id === currentCourse.id) {
             return {
@@ -66,34 +72,53 @@ const RadioCard = ({
           }
         });
         console.log(crsID, mdlID);
-        addToDB(
-          "users",
-          {
-            ...currentUser,
-            currentModule: {
-              ...currentUser.currentModule,
-              moduleID: currentUser.currentModule.moduleID + 1,
-            },
-            completedCourses: courseList,
-          },
-          currentUser.id
-        );
-        setCurrentUser({
+        const newCourses = currentUser.courses.coursesEnrolled.map((crs) => {
+          if (crs.courseID === crsID) {
+            const taskCompletedNew = [...crs.taskCompleted, mdlID];
+            return {
+              ...crs,
+              taskCompleted: taskCompletedNew,
+            };
+          } else {
+            return crs;
+          }
+        });
+        const newUser = {
           ...currentUser,
           currentModule: {
             ...currentUser.currentModule,
             moduleID: currentUser.currentModule.moduleID + 1,
           },
           completedCourses: courseList,
-        });
+          courses: { ...currentUser.courses, coursesEnrolled: newCourses },
+        };
+        addToDB("users", newUser, currentUser.id);
+        setCurrentUser(newUser);
         history.push(`${nextModuleUrl}`);
+      } else {
+        console.log("b");
+        let crsName = "";
+        universal.courses.map((course) => {
+          crsName = course.courseName;
+        });
+        setCongratulations({
+          ...congratulations,
+          course: { courseName: crsName, courseId: crsID },
+        });
+        // send me to a congratulation page and give me a reward
       }
     } else {
-      setCongratulations({
-        ...congratulations,
-        course: { courseName: "please change me in radio card line 79", courseId: crsID },
-      });
-      // send me to a congratulation page and give me a reward
+      console.log("c");
+      if (!(nextModuleUrl === "")) {
+        setCurrentUser({
+          ...currentUser,
+        });
+        console.log(nextModuleUrl);
+        history.push(`${nextModuleUrl}`);
+      } else {
+        console.log("e");
+        history.push("/module");
+      }
     }
   };
   let i = 0;
@@ -225,6 +250,7 @@ const mapStateToProps = (state) => {
   return {
     currentUser: selectCurrentUser(state),
     congratulations: selectCongratulations(state),
+    universal: selectUniversal(state),
   };
 };
 const mapDispatchToProps = (dispatch) => {

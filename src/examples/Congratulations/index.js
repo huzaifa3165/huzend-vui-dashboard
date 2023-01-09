@@ -9,7 +9,6 @@ import { addCongratulations } from "redux/profile/profile.actions";
 import { useHistory } from "react-router-dom";
 import { setCurrentUser } from "redux/user/user.actions";
 import { selectCurrentUser } from "redux/user/user.reselect";
-import { selectCongratulationsCourse } from "redux/profile/profile.reselect";
 import { addToDB } from "../../firebase";
 
 const Congratulations = ({
@@ -32,6 +31,7 @@ const Congratulations = ({
           ...currentUser.courses,
           coursesEnrolled: newArray,
         },
+        currentModule: null,
       },
       currentUser.id
     );

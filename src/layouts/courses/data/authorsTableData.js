@@ -141,6 +141,7 @@ export const DataFunc = (courses, currentUser, setCurrentUser, universal) => {
                       currentUser.completedCourses.map((crs) => {
                         if (crs.id === course.courseID) {
                           moduleId = crs.moduleID;
+                          console.log("module id is", moduleId);
                         }
                       });
                       let tasksArray = moduleId === 0 ? [] : naturalNumbers(moduleId);

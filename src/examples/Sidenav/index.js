@@ -111,13 +111,15 @@ function Sidenav({ currentUser, universal, color, brandName, routes, ...rest }) 
     let iteration = true;
     if (universal) {
       universal.courses.map((course) => {
-        if (course.courseID === currentUser.currentModule.id) {
-          course.learnModule.map((module) => {
-            if (module.id === currentUser.currentModule.moduleID && iteration) {
-              iteration = false;
-              useLearningLink(module.moduleName);
-            }
-          });
+        if (currentUser.currentModule) {
+          if (course.courseID === currentUser.currentModule.id) {
+            course.learnModule.map((module) => {
+              if (module.id === currentUser.currentModule.moduleID && iteration) {
+                iteration = false;
+                useLearningLink(module.moduleName);
+              }
+            });
+          }
         }
       });
     }

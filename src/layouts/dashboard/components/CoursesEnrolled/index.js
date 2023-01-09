@@ -28,7 +28,7 @@ const CoursesEnrolled = ({ currentUser }) => {
             <CircularProgress
               variant="determinate"
               value={
-                currentUser
+                currentUser.courses.coursesEnrolled
                   ? (currentUser.courses.coursesEnrolled.length / Universal.courses.length) * 100
                   : 0
               }
@@ -90,7 +90,7 @@ const CoursesEnrolled = ({ currentUser }) => {
             sx={{ minWidth: "80px" }}
           >
             <VuiTypography color="white" variant="h3">
-              {currentUser ? currentUser.courses.coursesEnrolled.length : 0}
+              {currentUser.courses.coursesEnrolled ? currentUser.courses.coursesEnrolled.length : 0}
             </VuiTypography>
             <VuiTypography color="text" variant="caption" fontWeight="regular">
               Enrolled from {Universal.courses.length}

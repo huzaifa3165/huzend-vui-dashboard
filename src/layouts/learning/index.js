@@ -23,6 +23,7 @@ const Learning = ({ currentUser, congratulations }) => {
     try {
       const res = await axios.post("/learningdata", { title: learnID });
       useFetchData(res.data);
+      console.log(fetchData);
     } catch (error) {
       console.log(error);
     }
@@ -47,7 +48,6 @@ const Learning = ({ currentUser, congratulations }) => {
   ) : (
     <DashboardLayout>
       <DashboardNavbar />
-      {console.log(fetchData)}
       {fetchData && (
         <VuiBox p={3}>
           <VuiBox mb={3}>

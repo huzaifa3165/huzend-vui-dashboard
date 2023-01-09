@@ -8,7 +8,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { selectUniversal } from "redux/user/user.reselect";
 import Table from "../../examples/Tables/Table";
 import { selectCurrentUser } from "redux/user/user.reselect";
@@ -16,21 +16,28 @@ import { setCurrentUser } from "redux/user/user.actions";
 
 const Module = ({ currentUser, universal, setCurrentUser }) => {
   const [data, useData] = useState({ id: "", title: "", moduleItems: [] });
+  const history = useHistory();
+
   useEffect(() => {
     if (currentUser.displayName !== "" && universal) {
       // iterate universal and match the currentModule(currentUser) id with the universal course and id
       // add some logic to highlight the one which is the current one
       let iteration = true;
       universal.courses.map((course) => {
-        if (course.courseID === currentUser.currentModule.id && iteration) {
-          iteration = false;
-          useData({
-            id: course.courseID,
-            title: course.courseName,
-            moduleItems: course.learnModule,
-          });
+        if (currentUser.currentModule) {
+          if (course.courseID === currentUser.currentModule.id && iteration) {
+            iteration = false;
+            useData({
+              id: course.courseID,
+              title: course.courseName,
+              moduleItems: course.learnModule,
+            });
+          }
         }
       });
+      if (iteration) {
+        history.push("/courses");
+      }
     }
   }, [currentUser, universal]);
   const changeCurrentModule = () => {
@@ -78,17 +85,22 @@ const Module = ({ currentUser, universal, setCurrentUser }) => {
                           year: "numeric",
                         });
                         return {
-                          title: (
-                            <Link
-                              to={moduleItem.url}
-                              key={moduleItem.id}
-                              onClick={changeCurrentModule}
-                            >
-                              <VuiTypography variant="outline" color="primary">
+                          title:
+                            moduleItem.id === currentUser.currentModule.moduleID ? (
+                              <Link
+                                to={moduleItem.url}
+                                key={moduleItem.id}
+                                onClick={changeCurrentModule}
+                              >
+                                <VuiTypography variant="outline" color="primary">
+                                  {moduleItem.moduleName}
+                                </VuiTypography>
+                              </Link>
+                            ) : (
+                              <VuiTypography variant="outline" color="text">
                                 {moduleItem.moduleName}
                               </VuiTypography>
-                            </Link>
-                          ),
+                            ),
                           date: newDateStr,
                           marks: moduleItem.marks,
                         };

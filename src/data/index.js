@@ -693,7 +693,6 @@ export const initialUser = {
   rewards: [],
   completedCourses: [],
   currentModule: {
-    id: 1,
-    moduleID: 1, // which is not completed
+    // which is not completed
   },
 };
