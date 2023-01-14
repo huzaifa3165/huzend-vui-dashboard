@@ -57,12 +57,26 @@ import { barChartDataDashboard } from "layouts/dashboard/data/barChartData";
 import { barChartOptionsDashboard } from "layouts/dashboard/data/barChartOptions";
 import { connect } from "react-redux";
 import { selectCurrentUser } from "redux/user/user.reselect";
-
+import axios from "../../data/axios";
 import { Redirect } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { async } from "@firebase/util";
 
 function Dashboard({ currentUser }) {
   const { gradients } = colors;
   const { cardContent } = gradients;
+  const [totalUsers, setTotalUsers] = useState("0");
+  const getTotalUsers = async () => {
+    console.log("infunction");
+    const res = await axios.get("/usersCollectionSize");
+    console.log(res);
+    setTotalUsers(res.data);
+    return res.data;
+  };
+  useEffect(() => {
+    console.log("going to run the function");
+    getTotalUsers();
+  }, []);
 
   return (
     <DashboardLayout>
@@ -160,7 +174,8 @@ function Dashboard({ currentUser }) {
                         </VuiTypography>
                       </Stack>
                       <VuiTypography color="white" variant="lg" fontWeight="bold" mb="8px">
-                        32,984
+                        {console.log(totalUsers)}
+                        {totalUsers}
                       </VuiTypography>
                       <VuiProgress value={60} color="info" sx={{ background: "#2D2E5F" }} />
                     </Grid>

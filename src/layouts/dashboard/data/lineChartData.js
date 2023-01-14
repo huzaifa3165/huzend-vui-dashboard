@@ -89,29 +89,47 @@ const emptyLastYearTimeSpent = {
     w4: [0, 0, 0, 0, 0, 0, 0],
   },
 };
+function convertToNewObject(lastYearTimeSpentFull) {
+  const result = {};
+  for (const month in lastYearTimeSpentFull) {
+    result[month] = {};
+    for (let day = 1; day <= 31; day++) {
+      const week = Math.ceil(day / 7);
+      if (!result[month][`w${week}`]) {
+        result[month][`w${week}`] = Array(7).fill(0);
+      }
+      result[month][`w${week}`][(day - 1) % 7] = lastYearTimeSpentFull[month][day];
+    }
+  }
+  return result;
+}
+
 const TimeSpentLastYearPerMonth = (dataObj) => {
   let dataArray = [];
   Object.entries(dataObj).map(([key, value], index) => {
-    const { w1, w2, w3, w4 } = value;
-    const a1 = w1.reduce((a, b) => a + b, 0) / w1.length;
-    const a2 = w2.reduce((a, b) => a + b, 0) / w2.length;
-    const a3 = w3.reduce((a, b) => a + b, 0) / w3.length;
-    const a4 = w4.reduce((a, b) => a + b, 0) / w4.length;
-    dataArray.push(Math.round((a1 + a2 + a3 + a4) / 240)); // 4(average) * 60(toMinutes)
+    const { w1, w2, w3, w4, w5 } = value;
+    const a1 = w1.reduce((a, b) => a + b, 0);
+    const a2 = w2.reduce((a, b) => a + b, 0);
+    const a3 = w3.reduce((a, b) => a + b, 0);
+    const a4 = w4.reduce((a, b) => a + b, 0);
+    const a5 = w5.reduce((a, b) => a + b, 0);
+    dataArray.push(Math.round((a1 + a2 + a3 + a4 + a5) * 60)); // 4(average) * 60(toMinutes)
   });
   return dataArray;
 };
-const lineChartDataDashboard = (profile) => [
-  {
-    name: "Watch Time",
-    data: profile
-      ? TimeSpentLastYearPerMonth(profile.lastYearTimeSpentFull)
-      : TimeSpentLastYearPerMonth(emptyLastYearTimeSpent),
-  },
-  {
-    name: "Blogs Traffic",
-    data: profile ? profile.blogsTraffic : [0, 0, 0, 0, 0, 0, 0],
-  },
-];
+const lineChartDataDashboard = (profile) => {
+  return [
+    {
+      name: "Time Spent (Minutes)",
+      data: profile
+        ? TimeSpentLastYearPerMonth(convertToNewObject(profile.lastYearTimeSpentFull))
+        : TimeSpentLastYearPerMonth(emptyLastYearTimeSpent),
+    },
+    {
+      name: "Blogs Traffic",
+      data: profile ? profile.blogsTraffic : [0, 0, 0, 0, 0, 0, 0],
+    },
+  ];
+};
 
 export default lineChartDataDashboard;

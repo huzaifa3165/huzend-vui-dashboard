@@ -107,7 +107,6 @@ function Sidenav({ currentUser, universal, color, brandName, routes, ...rest }) 
     }
   }, [isSignOut]);
   useEffect(() => {
-    console.log("I am called");
     let iteration = true;
     if (universal) {
       universal.courses.map((course) => {
@@ -123,8 +122,6 @@ function Sidenav({ currentUser, universal, color, brandName, routes, ...rest }) 
         }
       });
     }
-
-    console.log(currentUser);
   }, [currentUser]);
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)

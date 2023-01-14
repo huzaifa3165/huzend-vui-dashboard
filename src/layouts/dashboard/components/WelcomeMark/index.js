@@ -7,8 +7,30 @@ import gif from "assets/images/cardimgfree.png";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { selectCurrentUser } from "redux/user/user.reselect";
-const WelcomeMark = ({ currentUser }) => {
+import { selectUniversal } from "redux/user/user.reselect";
+import { useHistory } from "react-router-dom";
+
+const WelcomeMark = ({ currentUser, universal }) => {
   const [redirect, useRedirect] = useState(false);
+  const [learningLink, useLearningLink] = useState("");
+  const history = useHistory();
+  useEffect(() => {
+    let iteration = true;
+    if (universal) {
+      universal.courses.map((course) => {
+        if (currentUser.currentModule) {
+          if (course.courseID === currentUser.currentModule.id) {
+            course.learnModule.map((module) => {
+              if (module.id === currentUser.currentModule.moduleID && iteration) {
+                iteration = false;
+                useLearningLink(module.moduleName);
+              }
+            });
+          }
+        }
+      });
+    }
+  }, [currentUser]);
   return (
     <Card
       sx={() => ({
@@ -35,9 +57,7 @@ const WelcomeMark = ({ currentUser }) => {
         </VuiBox>
         <VuiTypography
           component="a"
-          onClick={() => {
-            useRedirect(true);
-          }}
+          onClick={() => history.push(learningLink ? `/learning/${learningLink}` : "/courses")}
           variant="button"
           color="white"
           fontWeight="regular"
@@ -68,6 +88,7 @@ const WelcomeMark = ({ currentUser }) => {
 const mapStateToProps = (state) => {
   return {
     currentUser: selectCurrentUser(state),
+    universal: selectUniversal(state),
   };
 };
 

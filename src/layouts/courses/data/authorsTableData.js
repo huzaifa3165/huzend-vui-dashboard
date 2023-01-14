@@ -72,7 +72,7 @@ function naturalNumbers(n) {
   return result;
 }
 
-export const DataFunc = (courses, currentUser, setCurrentUser, universal) => {
+export const DataFunc = (courses, currentUser, setCurrentUser, universal, history) => {
   return {
     columns: [
       { name: "name", align: "left" },
@@ -197,6 +197,8 @@ export const DataFunc = (courses, currentUser, setCurrentUser, universal) => {
                         completedCourses: newCompletedCourses,
                         currentModule: newCurrentModule,
                       });
+
+                      history.push("/module");
                     }
                   });
                 }}

@@ -15,7 +15,7 @@ function ReferralTracking({ currentUser, universal }) {
   const { info, gradients } = colors;
   const { cardContent } = gradients;
   let activeCourse = {};
-  if (currentUser.displayName) {
+  if (currentUser.displayName && universal) {
     currentUser.courses.coursesEnrolled.map((course) => {
       if (course.activelyTaking) {
         activeCourse = course;

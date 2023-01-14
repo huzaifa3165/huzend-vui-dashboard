@@ -62,15 +62,51 @@ import {
 } from "context";
 
 // Images
+
 import team2 from "assets/images/team-2.jpg";
+// ===== use these images as demo when you want to design your owns for sending notifications to the users=====
+
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import VuiAvatar from "components/VuiAvatar";
+import { selectUniversal } from "redux/user/user.reselect";
 
-function DashboardNavbar({ absolute, light, isMini, currentUser }) {
+function getTimeDifference(time) {
+  // Convert the time object to a Date object
+  var date = new Date(time.seconds * 1000 + time.nanoseconds / 1000000);
+
+  // Calculate the difference between the date and the current date
+  var difference = Date.now() - date.getTime();
+
+  // Convert the difference to a human-readable format
+  if (difference < 60000) {
+    // 1 minute
+    return Math.floor(difference / 1000) + " seconds ago";
+  } else if (difference < 3600000) {
+    // 1 hour
+    return Math.floor(difference / 60000) + " minutes ago";
+  } else if (difference < 86400000) {
+    // 1 day
+    return Math.floor(difference / 3600000) + " hours ago";
+  } else if (difference < 604800000) {
+    // 1 week
+    return Math.floor(difference / 86400000) + " days ago";
+  } else if (difference < 2592000000) {
+    // 30 days
+    return Math.floor(difference / 604800000) + " weeks ago";
+  } else if (difference < 31536000000) {
+    // 365 days
+    return Math.floor(difference / 2592000000) + " months ago";
+  } else {
+    return Math.floor(difference / 31536000000) + " years ago";
+  }
+}
+
+function DashboardNavbar({ absolute, light, isMini, currentUser, universal }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useVisionUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
+  const [latestThree, setLatestThree] = useState([]);
   const route = useLocation().pathname.split("/").slice(1);
 
   useEffect(() => {
@@ -103,6 +139,31 @@ function DashboardNavbar({ absolute, light, isMini, currentUser }) {
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
+  useEffect(() => {
+    if (universal) {
+      const latest3 = universal.notifications
+        .sort((a, b) => {
+          // Compare the time properties of the two objects
+          if (a.time.seconds < b.time.seconds) {
+            return -1;
+          } else if (a.time.seconds > b.time.seconds) {
+            return 1;
+          } else {
+            // If the seconds are equal, compare the nanoseconds
+            if (a.time.nanoseconds < b.time.nanoseconds) {
+              return -1;
+            } else if (a.time.nanoseconds > b.time.nanoseconds) {
+              return 1;
+            } else {
+              // If the nanoseconds are also equal, consider the items equal
+              return 0;
+            }
+          }
+        })
+        .slice(-3);
+      setLatestThree(latest3);
+    }
+  }, [universal]);
 
   // Render the notifications menu
   const renderMenu = () => (
@@ -117,14 +178,27 @@ function DashboardNavbar({ absolute, light, isMini, currentUser }) {
       onClose={handleCloseMenu}
       sx={{ mt: 2 }}
     >
-      <NotificationItem
-        image={<img src={team2} alt="person" />}
-        title={["New message", "from Laur"]}
-        date="13 minutes ago"
-        onClick={handleCloseMenu}
-      />
-      <NotificationItem
-        image={<img src={logoSpotify} alt="person" />}
+      {universal && latestThree
+        ? latestThree.map((notification) => {
+            return (
+              <NotificationItem
+                image={<img src={notification.image} alt="person" style={{ padding: "6px" }} />}
+                title={[notification.boldText, notification.lightText]}
+                date={getTimeDifference(notification.time)}
+                onClick={handleCloseMenu}
+              />
+            );
+          })
+        : ""}
+      {/* logoSpotify */}
+      {/* <NotificationItem
+        image={
+          <img
+            src="https://www.linkpicture.com/q/mastercard_3.png"
+            alt="person"
+            style={{ padding: "6px" }}
+          />
+        }
         title={["New album", "by Travis Scott"]}
         date="1 day"
         onClick={handleCloseMenu}
@@ -139,7 +213,7 @@ function DashboardNavbar({ absolute, light, isMini, currentUser }) {
         title={["", "Payment successfully completed"]}
         date="2 days"
         onClick={handleCloseMenu}
-      />
+      /> */}
     </Menu>
   );
 
@@ -197,23 +271,6 @@ function DashboardNavbar({ absolute, light, isMini, currentUser }) {
                   </IconButton>
                 </Link>
               )}
-
-              <IconButton
-                size="small"
-                color="inherit"
-                sx={navbarMobileMenu}
-                onClick={handleMiniSidenav}
-              >
-                <Icon className={"text-white"}>{miniSidenav ? "menu_open" : "menu"}</Icon>
-              </IconButton>
-              <IconButton
-                size="small"
-                color="inherit"
-                sx={navbarIconButton}
-                onClick={handleConfiguratorOpen}
-              >
-                <Icon>local_library</Icon>
-              </IconButton>
               <IconButton
                 size="small"
                 color="inherit"
@@ -224,6 +281,23 @@ function DashboardNavbar({ absolute, light, isMini, currentUser }) {
                 onClick={handleOpenMenu}
               >
                 <Icon className={light ? "text-white" : "text-dark"}>notifications</Icon>
+              </IconButton>
+              <IconButton
+                size="small"
+                color="inherit"
+                sx={navbarIconButton}
+                onClick={handleConfiguratorOpen}
+              >
+                <Icon>local_library</Icon>
+              </IconButton>
+
+              <IconButton
+                size="small"
+                color="inherit"
+                sx={navbarMobileMenu}
+                onClick={handleMiniSidenav}
+              >
+                <Icon className={"text-white"}>{miniSidenav ? "menu_open" : "menu"}</Icon>
               </IconButton>
               {renderMenu()}
             </VuiBox>
@@ -251,6 +325,7 @@ DashboardNavbar.propTypes = {
 const mapStateToProps = (state) => {
   return {
     currentUser: selectCurrentUser(state),
+    universal: selectUniversal(state),
   };
 };
 

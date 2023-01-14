@@ -105,7 +105,17 @@ const projectsTableData = (currentUser, universal) => {
         title: (
           <VuiBox display="flex" alignItems="center">
             <AdobeXD size="20px" />
-            <VuiTypography pl="16px" color="white" variant="button" fontWeight="medium">
+            <VuiTypography
+              pl="16px"
+              color="white"
+              variant="button"
+              fontWeight="medium"
+              value={data.courseID}
+              component="a"
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+            >
               {data.courseName}
             </VuiTypography>
           </VuiBox>

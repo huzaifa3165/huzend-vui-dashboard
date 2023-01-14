@@ -30,12 +30,14 @@ import { setCurrentUser } from "redux/user/user.actions";
 import { initialUser } from "data";
 import { selectUniversal } from "redux/user/user.reselect";
 import { setUniversal } from "redux/user/user.actions";
+import usePageVisibility from "utils/usePageVisibility";
 
 const App = ({ currentUser, universal, setUniversal, setCurrentUser }) => {
   const [controller, dispatch] = useVisionUIController();
   const { miniSidenav, direction, layout, openConfigurator, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
+  usePageVisibility((time) => time >= 0 && axios.post("/timeSpent", { time, id: currentUser.id }));
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -151,7 +153,7 @@ const App = ({ currentUser, universal, setUniversal, setCurrentUser }) => {
         {getRoutes(routes(currentUser))}
         <Redirect
           from="*"
-          to={currentUser.email !== "" ? `/dashboard` : `authentication/sign-in`}
+          to={currentUser.email !== "" ? `/dashboard` : `/authentication/sign-in`}
         />
       </Switch>
     </ThemeProvider>

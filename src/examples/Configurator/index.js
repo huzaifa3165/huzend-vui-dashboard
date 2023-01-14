@@ -24,8 +24,8 @@ import GitHubButton from "react-github-btn";
 // @mui material components
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
+import { Link } from "react-router-dom";
 
 // @mui icons
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -36,7 +36,8 @@ import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
 import VuiButton from "components/VuiButton";
 import VuiSwitch from "components/VuiSwitch";
-
+import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 // Custom styles for the Configurator
 import ConfiguratorRoot from "examples/Configurator/ConfiguratorRoot";
 
@@ -48,13 +49,62 @@ import {
   setFixedNavbar,
   setSidenavColor,
 } from "context";
+import { selectCurrentUser } from "redux/user/user.reselect";
+import { selectUniversal } from "redux/user/user.reselect";
+import { setCurrentUser } from "redux/user/user.actions";
 
-function Configurator() {
+function Configurator({ universal, currentUser, setCurrentUser }) {
   const [controller, dispatch] = useVisionUIController();
   const { openConfigurator, transparentSidenav, fixedNavbar, sidenavColor } = controller;
   const [disabled, setDisabled] = useState(false);
   const sidenavColors = ["primary", "info", "success", "warning", "error"];
+  const [data, useData] = useState({ id: "", title: "", moduleItems: [] });
+  const history = useHistory();
 
+  useEffect(() => {
+    if (currentUser.displayName !== "" && universal && currentUser.currentModule) {
+      // iterate universal and match the currentModule(currentUser) id with the universal course and id
+      // add some logic to highlight the one which is the current one
+      let iteration = true;
+      universal.courses.map((course) => {
+        if (currentUser.currentModule) {
+          if (course.courseID === currentUser.currentModule.id && iteration) {
+            iteration = false;
+            useData({
+              id: course.courseID,
+              title: course.courseName,
+              moduleItems: course.learnModule,
+            });
+          }
+        }
+      });
+    }
+  }, [currentUser, universal]);
+  const changeCurrentModule = () => {
+    // ////////////////////////////////////////////////////////////////////////////////
+    // change the current Module
+
+    if (data.id !== currentUser.currentModule.id) {
+      let newCurrentModule;
+      currentUser.completedCourses.map((crs) => {
+        if (crs.id === data.id) {
+          newCurrentModule = { id: crs.id, moduleID: crs.moduleID + 1 };
+        }
+      });
+      addToDB(
+        "universal",
+        {
+          ...currentUser,
+          currentModule: newCurrentModule,
+        },
+        currentUser.id
+      );
+      setCurrentUser({
+        ...currentUser,
+        currentModule: newCurrentModule,
+      });
+    }
+  };
   // Use the useEffect hook to change the button state for the sidenav type based on window size.
   useEffect(() => {
     // A function that sets the disabled state of the buttons for the sidenav type.
@@ -101,15 +151,18 @@ function Configurator() {
         pb={0.8}
         px={3}
       >
-        <VuiBox>
-          <VuiTypography color="white" variant="h5" fontWeight="bold">
-            Settings
-          </VuiTypography>
-          <VuiTypography variant="body2" color="white" fontWeight="bold">
-            Customize dashboard options.
-          </VuiTypography>
-        </VuiBox>
-
+        {currentUser.displayName !== "" && universal ? (
+          <VuiBox>
+            <VuiTypography color="white" variant="h5" fontWeight="bold">
+              Learning
+            </VuiTypography>
+            <VuiTypography variant="body2" color="white" fontWeight="bold">
+              {data.title}
+            </VuiTypography>
+          </VuiBox>
+        ) : (
+          ""
+        )}
         <Icon
           sx={({ typography: { size, fontWeightBold }, palette: { white, dark } }) => ({
             fontSize: `${size.md} !important`,
@@ -127,12 +180,34 @@ function Configurator() {
 
       <Divider light />
 
-      <VuiBox pt={1.25} pb={3} px={3}>
-        <VuiBox>
-          <VuiTypography variant="h6" color="white">
-            Sidenav Colors
-          </VuiTypography>
-
+      <VuiBox pb={1} px={3}>
+        <VuiBox px={3.2}>
+          {currentUser.displayName !== "" && universal ? (
+            <>
+              {data.moduleItems.map((moduleItem) => {
+                return (
+                  <>
+                    <VuiTypography variant="caption" color="light" sx={{ display: "block" }}>
+                      {moduleItem.id === currentUser.currentModule.moduleID ? (
+                        <Link to={moduleItem.url} key={moduleItem.id} onClick={changeCurrentModule}>
+                          <VuiTypography variant="body2" color="primary">
+                            {moduleItem.moduleName}
+                          </VuiTypography>
+                        </Link>
+                      ) : (
+                        <VuiTypography variant="body2" color="text">
+                          {moduleItem.moduleName}
+                        </VuiTypography>
+                      )}
+                    </VuiTypography>
+                  </>
+                );
+              })}
+            </>
+          ) : (
+            ""
+          )}
+          {/* 
           <VuiBox mb={0.5}>
             {sidenavColors.map((color) => (
               <IconButton
@@ -160,11 +235,12 @@ function Configurator() {
                   },
                 })}
                 onClick={() => setSidenavColor(dispatch, color)}
-              />
-            ))}
-          </VuiBox>
+                />
+                ))}
+              </VuiBox> */}
         </VuiBox>
-        {window.innerWidth >= 1440 && (
+        <Divider light />
+        {/* {window.innerWidth >= 1440 && (
           <VuiBox mt={3} lineHeight={1}>
             <VuiTypography variant="h6" color="white">
               Sidenav Type
@@ -204,23 +280,23 @@ function Configurator() {
               </VuiButton>
             </VuiBox>
           </VuiBox>
-        )}
+        )} */}
 
-        <VuiBox mt={3} mb={2} lineHeight={1}>
+        {/* <VuiBox mt={3} mb={2} lineHeight={1}>
           <VuiTypography variant="h6" color="white">
             Navbar Fixed
           </VuiTypography>
 
-          {/* <Switch checked={fixedNavbar} onChange={handleFixedNavbar} color="info" /> */}
           <VuiSwitch checked={fixedNavbar} onChange={handleFixedNavbar} color="info" />
-        </VuiBox>
+        </VuiBox> 
 
         <Divider light />
+         */}
 
         <VuiBox mt={3} mb={2}>
           <VuiBox mb={2}>
             <VuiButton
-              component={Link}
+              component="a"
               href="https://youtube.com/@huzend?sub_confirmation=1"
               target="_blank"
               rel="noreferrer"
@@ -232,7 +308,7 @@ function Configurator() {
             </VuiButton>
           </VuiBox>
           <VuiButton
-            component={Link}
+            component="a"
             href="https://www.patreon.com/user?u=71272467"
             target="_blank"
             rel="noreferrer"
@@ -243,17 +319,7 @@ function Configurator() {
             SUPPORT ON PATREON
           </VuiButton>
         </VuiBox>
-        <VuiBox display="flex" justifyContent="center">
-          <GitHubButton
-            href="https://github.com/huzaifa3165/monsters-rolodex"
-            data-icon="octicon-star"
-            data-size="large"
-            data-show-count="true"
-            aria-label="Star creativetimofficial/vision-ui-dashboard-react on GitHub"
-          >
-            Star
-          </GitHubButton>
-        </VuiBox>
+
         <VuiBox mt={3} textAlign="center">
           <VuiBox mb={0.5}>
             <VuiTypography variant="h6" color="white">
@@ -290,5 +356,16 @@ function Configurator() {
     </ConfiguratorRoot>
   );
 }
+const mapStateToProps = (state) => {
+  return {
+    currentUser: selectCurrentUser(state),
+    universal: selectUniversal(state),
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  };
+};
 
-export default Configurator;
+export default connect(mapStateToProps, mapDispatchToProps)(Configurator);

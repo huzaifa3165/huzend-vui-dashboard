@@ -13,6 +13,7 @@ import { selectUniversal } from "redux/user/user.reselect";
 import Table from "../../examples/Tables/Table";
 import { selectCurrentUser } from "redux/user/user.reselect";
 import { setCurrentUser } from "redux/user/user.actions";
+import { addToDB } from "firebase";
 
 const Module = ({ currentUser, universal, setCurrentUser }) => {
   const [data, useData] = useState({ id: "", title: "", moduleItems: [] });
@@ -51,6 +52,14 @@ const Module = ({ currentUser, universal, setCurrentUser }) => {
           newCurrentModule = { id: crs.id, moduleID: crs.moduleID + 1 };
         }
       });
+      addToDB(
+        "universal",
+        {
+          ...currentUser,
+          currentModule: newCurrentModule,
+        },
+        currentUser.id
+      );
       setCurrentUser({
         ...currentUser,
         currentModule: newCurrentModule,

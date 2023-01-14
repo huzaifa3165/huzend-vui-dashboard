@@ -38,8 +38,10 @@ import { setCurrentUser } from "redux/user/user.actions";
 import { useEffect, useState } from "react";
 import axios from "../../data/axios";
 import { selectUniversal } from "redux/user/user.reselect";
+import { useHistory } from "react-router-dom";
 
 function Courses({ currentUser, universal, setCurrentUser }) {
+  const history = useHistory();
   const [courses, useCourses] = useState(undefined);
   const { columns: prCols, rows: prRows } = projectsTableData(currentUser, universal);
   const coursesDataFetch = async () => {
@@ -55,7 +57,7 @@ function Courses({ currentUser, universal, setCurrentUser }) {
     coursesDataFetch();
   }, []);
 
-  const { columns, rows } = DataFunc(courses, currentUser, setCurrentUser, universal);
+  const { columns, rows } = DataFunc(courses, currentUser, setCurrentUser, universal, history);
 
   return (
     <DashboardLayout>
