@@ -55,17 +55,33 @@ const RadioCard = ({
   };
   const handleNextLesson = (e) => {
     e.preventDefault();
-
+    setAns("");
+    setIteration(0);
+    setError(false);
+    setHelperText("Choose wisely");
+    setAnswers([]);
     if (crsID === currentUser.currentModule.id && mdlID === currentUser.currentModule.moduleID) {
       console.log("this is");
       console.log(crsID, mdlID);
       if (!(nextModuleUrl === "")) {
         console.log("a");
+        let thisCourseMarks = 0;
+        universal.courses.map((crs) => {
+          if (crs.courseID === crsID) {
+            crs.learnModule.map((mdl) => {
+              if (mdl.id === mdlID) {
+                thisCourseMarks = mdl.marks;
+              }
+            });
+          }
+        });
+        console.log("Marks added", thisCourseMarks);
         const courseList = currentUser.completedCourses.map((currentCourse) => {
           if (currentUser.currentModule.id === currentCourse.id) {
             return {
               ...currentCourse,
               moduleID: currentCourse.moduleID + 1,
+              marks: currentCourse.marks + thisCourseMarks,
             };
           } else {
             return currentCourse;

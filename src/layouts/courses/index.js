@@ -43,7 +43,12 @@ import { useHistory } from "react-router-dom";
 function Courses({ currentUser, universal, setCurrentUser }) {
   const history = useHistory();
   const [courses, useCourses] = useState(undefined);
-  const { columns: prCols, rows: prRows } = projectsTableData(currentUser, universal);
+  const { columns: prCols, rows: prRows } = projectsTableData(
+    currentUser,
+    universal,
+    history,
+    setCurrentUser
+  );
   const coursesDataFetch = async () => {
     try {
       const res = await axios.get("/courses");

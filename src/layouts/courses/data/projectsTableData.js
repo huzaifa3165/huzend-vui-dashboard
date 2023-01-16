@@ -41,6 +41,7 @@ import logoSlack from "assets/images/small-logos/logo-slack.svg";
 import logoWebDev from "assets/images/small-logos/logo-webdev.svg";
 import logoXD from "assets/images/small-logos/logo-xd.svg";
 import { profile, Universal } from "../../../data";
+import { addToDB } from "firebase";
 let tasksTotalLength;
 
 const avatars = (members) =>
@@ -86,7 +87,7 @@ const action = (
   </Icon>
 );
 
-const projectsTableData = (currentUser, universal) => {
+const projectsTableData = (currentUser, universal, history, setCurrentUser) => {
   return {
     columns: [
       { name: "title", align: "left" },
@@ -112,8 +113,35 @@ const projectsTableData = (currentUser, universal) => {
               fontWeight="medium"
               value={data.courseID}
               component="a"
+              sx={{
+                cursor: "pointer",
+              }}
               onClick={(e) => {
                 e.preventDefault();
+                const id = parseInt(e.target.getAttribute("value"));
+
+                let modID = 1;
+                currentUser.completedCourses.map((completedCrs) => {
+                  if (id === completedCrs.id) {
+                    modID = completedCrs.moduleID + 1;
+                  }
+                });
+
+                let newCurrentModule = { id, moduleID: modID };
+                setCurrentUser({
+                  ...currentUser,
+                  currentModule: newCurrentModule,
+                });
+                addToDB(
+                  "users",
+                  {
+                    ...currentUser,
+                    currentMoule: newCurrentModule,
+                  },
+                  currentUser.id
+                );
+
+                history.push("/module");
               }}
             >
               {data.courseName}

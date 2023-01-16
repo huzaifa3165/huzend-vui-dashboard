@@ -67,14 +67,12 @@ function Dashboard({ currentUser }) {
   const { cardContent } = gradients;
   const [totalUsers, setTotalUsers] = useState("0");
   const getTotalUsers = async () => {
-    console.log("infunction");
     const res = await axios.get("/usersCollectionSize");
     console.log(res);
     setTotalUsers(res.data);
     return res.data;
   };
   useEffect(() => {
-    console.log("going to run the function");
     getTotalUsers();
   }, []);
 
@@ -174,7 +172,6 @@ function Dashboard({ currentUser }) {
                         </VuiTypography>
                       </Stack>
                       <VuiTypography color="white" variant="lg" fontWeight="bold" mb="8px">
-                        {console.log(totalUsers)}
                         {totalUsers}
                       </VuiTypography>
                       <VuiProgress value={60} color="info" sx={{ background: "#2D2E5F" }} />

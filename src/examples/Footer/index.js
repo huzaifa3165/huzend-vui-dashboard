@@ -49,23 +49,17 @@ function Footer() {
           >
             Huzend&nbsp;&nbsp;
           </VuiTypography>
-          | &nbsp;Designed by&nbsp;
-          <VuiTypography
-            component="a"
-            variant="button"
-            href="https://creative-tim.com/"
-            sx={{ textAlign: "center", fontWeight: "500 !important" }}
-            color="info"
-            mr="2px"
-          >
-            Creative-Tim&nbsp;
-          </VuiTypography>
         </VuiTypography>
       </VuiBox>
       <VuiBox item xs={10}>
         <VuiBox display="flex" justifyContent="center" flexWrap="wrap" mb={3}>
           <VuiBox mr={{ xs: "20px", lg: "46px" }}>
-            <VuiTypography component="a" href="#" variant="body2" color="white">
+            <VuiTypography
+              component="a"
+              href="mailto:huzendofficial@gmail.com"
+              variant="body2"
+              color="white"
+            >
               Contact
             </VuiTypography>
           </VuiBox>
@@ -75,7 +69,12 @@ function Footer() {
             </VuiTypography>
           </VuiBox>
           <VuiBox>
-            <VuiTypography component="a" href="#" variant="body2" color="white">
+            <VuiTypography
+              component="a"
+              href="https://youtube.com/@Huzend"
+              variant="body2"
+              color="white"
+            >
               Channel
             </VuiTypography>
           </VuiBox>

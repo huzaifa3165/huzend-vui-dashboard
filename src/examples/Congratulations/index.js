@@ -31,7 +31,7 @@ const Congratulations = ({
           ...currentUser.courses,
           coursesEnrolled: newArray,
         },
-        currentModule: null,
+        currentModule: {},
       },
       currentUser.id
     );
@@ -41,6 +41,7 @@ const Congratulations = ({
         ...currentUser.courses,
         coursesEnrolled: newArray,
       },
+      currentModule: {},
     });
     history.push("/courses");
   };
